@@ -1,20 +1,23 @@
 {
   "name": "ABSENSI UGD",
   "short_name": "ABSENSI UGD",
-  "start_url": ".",
+  "start_url": "index.html?v=1777153304992",
   "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#3b82f6",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "version": "1777153304992",
   "icons": [
     {
       "src": "icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
