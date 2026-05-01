@@ -64,6 +64,9 @@
         .rekap-table td { padding: 10px 4px; text-align: center; border-bottom: 1px solid #f1f5f9; font-weight: 700; }
         .dark .rekap-table td { border-bottom: 1px solid #1e293b; }
         
+        .rekap-table tfoot td { background: #f1f5f9; font-weight: 900; color: #0d9488; border-top: 2px solid #0d9488; }
+        .dark .rekap-table tfoot td { background: #1e293b; color: #2dd4bf; border-top: 2px solid #0d9488; }
+
         .sticky-left { 
             position: sticky; 
             left: 0; 
@@ -179,9 +182,9 @@
             </div>
 
             <div class="mt-6 flex items-center justify-between px-2">
-                <p class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">Total Kehadiran</p>
+                <p class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">Hadir Bulan Ini</p>
                 <div class="flex items-center gap-1.5 bg-teal-500/10 px-2.5 py-1 rounded-lg border border-teal-500/20">
-                    <span class="text-[7px] font-black text-teal-600 uppercase">Semua Sesi:</span>
+                    <span class="text-[7px] font-black text-teal-600 uppercase">Total:</span>
                     <span id="stat-total-life" class="text-[9px] font-black text-teal-700 dark:text-teal-400">0</span>
                 </div>
             </div>
@@ -199,6 +202,11 @@
             </button>
         </div>
         
+        <div class="bg-white/50 dark:bg-slate-900/50 glass-effect border border-white/20 dark:border-slate-800 p-2 rounded-2xl">
+            <select id="rekap-select-month" onchange="renderRekap()" class="w-full bg-transparent p-2 text-[10px] font-black uppercase tracking-widest outline-none dark:text-white appearance-none text-center">
+                </select>
+        </div>
+
         <div class="grid grid-cols-2 gap-3 pb-2">
             <div class="relative">
                 <input type="text" id="rekap-search" oninput="renderRekap()" placeholder="Cari nama..." class="w-full bg-white/50 dark:bg-slate-900/50 glass-effect border border-white/20 dark:border-slate-800 p-3 rounded-2xl text-[10px] font-bold outline-none focus:ring-2 ring-teal-500/50 transition-all dark:text-white">
@@ -229,14 +237,6 @@
             </section>
 
             <div id="dashboard-content" class="hidden space-y-8">
-                <section>
-                    <div class="flex justify-between items-center mb-5 px-2">
-                        <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">📅 Jadwal Tugas</h3>
-                        <span id="logical-date-label" class="text-[9px] font-bold text-teal-600 dark:text-teal-400 bg-teal-500/10 px-3 py-1 rounded-full border border-teal-500/20 uppercase tracking-widest">--/--/----</span>
-                    </div>
-                    <div id="schedule-container" class="space-y-4"></div>
-                </section>
-
                 <section class="pb-10">
                     <div class="flex justify-between items-center mb-5 px-2">
                         <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">📝 Log Absen Harian</h3>
@@ -336,6 +336,24 @@
     }
     function triggerHaptic(t = 20) { if (navigator.vibrate) navigator.vibrate(t); }
 
+    function populateMonthSelector() {
+        const sel = document.getElementById('rekap-select-month');
+        if (!sel || sel.options.length > 0) return;
+        
+        const now = new Date();
+        const currentYear = now.getFullYear();
+        const currentMonth = now.getMonth();
+
+        for (let i = 0; i < 12; i++) {
+            const d = new Date(currentYear, currentMonth - i, 1);
+            const opt = document.createElement('option');
+            opt.value = `${d.getMonth()}-${d.getFullYear()}`;
+            opt.innerText = `${CONFIG.MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+            sel.appendChild(opt);
+        }
+        sel.value = `${currentMonth}-${currentYear}`;
+    }
+
     function showView(v) {
         triggerHaptic(15);
         document.getElementById('view-home').classList.toggle('hidden', v !== 'home');
@@ -347,8 +365,14 @@
         if (state.user && v === 'home') profile.classList.remove('hidden');
         else profile.classList.add('hidden');
 
-        if (v === 'rekap') rekapHeader.classList.remove('hidden');
-        else rekapHeader.classList.add('hidden');
+        if (v === 'rekap') {
+            rekapHeader.classList.remove('hidden');
+            populateMonthSelector();
+            renderRekap();
+            setTimeout(scrollToToday, 300);
+        } else {
+            rekapHeader.classList.add('hidden');
+        }
 
         const navHome = document.getElementById('nav-home');
         const navRekap = document.getElementById('nav-rekap');
@@ -359,19 +383,23 @@
             navHome.className = 'flex-1 py-4 flex flex-col items-center gap-1 rounded-[1.5rem] text-slate-400 transition-all';
             navRekap.className = 'flex-1 py-4 flex flex-col items-center gap-1 rounded-[1.5rem] text-teal-600 bg-teal-500/10 transition-all';
         }
-        if (v === 'rekap') {
-            renderRekap();
-            setTimeout(scrollToToday, 300);
-        }
         document.getElementById('scroll-root').scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function scrollToToday() {
-        const todayCell = document.querySelector('.today-col');
-        const wrapper = document.getElementById('rekap-scroll-container');
-        if (wrapper && todayCell) {
-            const offset = todayCell.offsetLeft - (wrapper.clientWidth / 2);
-            wrapper.scrollLeft = offset;
+        const sel = document.getElementById('rekap-select-month');
+        if(!sel) return;
+        const monthSel = sel.value;
+        const [m, y] = monthSel.split('-').map(Number);
+        const now = new Date();
+        
+        if (m === now.getMonth() && y === now.getFullYear()) {
+            const todayCell = document.querySelector('.today-col');
+            const wrapper = document.getElementById('rekap-scroll-container');
+            if (wrapper && todayCell) {
+                const offset = todayCell.offsetLeft - (wrapper.clientWidth / 2);
+                wrapper.scrollLeft = offset;
+            }
         }
     }
 
@@ -404,6 +432,9 @@
             state.data = await resp.json();
             renderDashboard();
             if (state.user) checkGPS();
+            if (!document.getElementById('view-rekap').classList.contains('hidden')) {
+                renderRekap();
+            }
         } catch (e) { if(!silent) showAlert("Error", "Gagal sinkron database", "error"); }
         finally { document.getElementById('loading-overlay').classList.add('hidden'); }
     }
@@ -432,10 +463,14 @@
         return d.toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\./g, '/');
     }
 
+    function getCurrentTimeString() {
+        return new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', hour12: false });
+    }
+
     function renderDashboard() {
         const info = getShiftInfo(); const logicalDate = getLogicalDate();
         document.getElementById('user-greeting').innerText = state.user ? state.user : "-";
-        document.getElementById('logical-date-label').innerText = logicalDate;
+        
         document.getElementById('card-auth').classList.toggle('hidden', !!state.user);
         document.getElementById('dashboard-content').classList.toggle('hidden', !state.user);
         
@@ -450,8 +485,16 @@
         if(state.user) {
             document.getElementById('nurse-full-name').innerText = state.user;
             document.getElementById('nurse-initial').innerText = state.user.charAt(0);
-            const allLogsUser = state.data.logs.filter(l => l.name === state.user);
-            document.getElementById('stat-total-life').innerText = allLogsUser.length;
+            
+            const [currentDay, currentMonth, currentYear] = logicalDate.split('/');
+            const currentMonthKey = `/${currentMonth}/${currentYear}`;
+            
+            const monthlyLogsUser = state.data.logs.filter(l => 
+                l.name === state.user && 
+                l.date.includes(currentMonthKey)
+            );
+            
+            document.getElementById('stat-total-life').innerText = monthlyLogsUser.length;
 
             const statusBadge = document.getElementById('user-jaga-status');
             const userLogsToday = state.data.logs.filter(l => l.name === state.user && l.date === logicalDate);
@@ -470,68 +513,40 @@
             }
         }
 
-        const dayNum = parseInt(logicalDate.split('/')[0]);
-        const currentHour = new Date().getHours();
-        
-        let schHtml = '';
-        ['Pagi', 'Siang', 'Malam'].forEach(s => {
-            const isCurrentShiftTime = s === info.label;
-            const names = state.data.officers.filter(n => { 
-                const sd = state.data.schedule[n] || state.data.schedule[n.toUpperCase()]; 
-                return sd && (sd[dayNum] === s[0] || sd[String(dayNum)] === s[0]); 
-            });
-            
-            schHtml += `
-            <div class="schedule-card bg-white/60 dark:bg-slate-900/60 glass-effect p-5 rounded-[2rem] border ${isCurrentShiftTime ? 'border-teal-500/30 ring-4 ring-teal-500/5' : 'border-white/20 dark:border-slate-800'} shadow-sm transition-all cursor-default">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 ${isCurrentShiftTime ? 'bg-teal-500 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-400'} rounded-2xl flex items-center justify-center text-sm font-black">${s[0]}</div>
-                        <div class="flex-1">
-                            <p class="text-[7px] font-black uppercase ${isCurrentShiftTime ? 'text-teal-600 dark:text-teal-400' : 'text-slate-400'} tracking-widest leading-none mb-1">Shift ${s}:</p>
-                            <div class="flex flex-wrap gap-1.5 mb-1">
-                                ${names.length ? names.map(n => {
-                                    const hasAbsen = state.data.logs.some(l => l.name === n && l.date === logicalDate && l.shift === s);
-                                    let badgeHtml = "";
-                                    if(hasAbsen) {
-                                        const isPastShift = (s === 'Pagi' && currentHour >= 14) || (s === 'Siang' && currentHour >= 20);
-                                        if(!isCurrentShiftTime || isPastShift) {
-                                            badgeHtml = `<span class="ml-1 text-[6px] bg-slate-200 dark:bg-slate-700 text-slate-500 px-1 rounded uppercase tracking-tighter font-black">Selesai</span>`;
-                                        } else {
-                                            badgeHtml = `<span class="ml-1 text-[6px] bg-emerald-500/20 text-emerald-600 px-1 rounded uppercase tracking-tighter font-black animate-pulse">Jaga</span>`;
-                                        }
-                                    }
-                                    return `<div class="flex items-center">
-                                        <span class="text-[10px] font-extrabold text-slate-700 dark:text-slate-200">${n}</span>
-                                        ${badgeHtml}
-                                        ${names.indexOf(n) !== names.length - 1 ? '<span class="mx-0.5 text-slate-300">,</span>' : ''}
-                                    </div>`;
-                                }).join('') : '<span class="text-[9px] text-slate-300 italic font-bold uppercase tracking-wider">Kosong</span>'}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>`;
-        });
-        document.getElementById('schedule-container').innerHTML = schHtml;
-
         const lToday = state.data.logs.filter(l => l.date === logicalDate).sort((a, b) => b.time.localeCompare(a.time));
-        document.getElementById('live-log-container').innerHTML = lToday.length ? lToday.map(l => `<div class="bg-white/40 dark:bg-slate-900/40 glass-effect p-4 rounded-[1.5rem] border border-white/20 dark:border-slate-800 flex items-center gap-4"><div class="w-10 h-10 bg-slate-100 dark:bg-slate-800 text-slate-400 rounded-xl flex items-center justify-center font-black text-xs uppercase">${l.name.charAt(0)}</div><div class="flex-1"><p class="text-[10px] font-black text-slate-800 dark:text-slate-200 uppercase tracking-tight">${l.name}</p><p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">${l.time} • Shift ${l.shift}</p></div><div class="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 px-3 py-1.5 rounded-xl text-[7px] font-black uppercase border">Masuk</div></div>`).join('') : '<div class="text-center py-10 opacity-30 text-[9px] font-black uppercase tracking-widest dark:text-white">Belum Ada Absen</div>';
+        document.getElementById('live-log-container').innerHTML = lToday.length ? lToday.map(l => `
+            <div class="bg-white/40 dark:bg-slate-900/40 glass-effect p-4 rounded-[1.5rem] border border-white/20 dark:border-slate-800 flex items-center gap-4">
+                <div class="w-10 h-10 bg-slate-100 dark:bg-slate-800 text-slate-400 rounded-xl flex items-center justify-center font-black text-xs uppercase">${l.name.charAt(0)}</div>
+                <div class="flex-1">
+                    <p class="text-[10px] font-black text-slate-800 dark:text-slate-200 uppercase tracking-tight">${l.name}</p>
+                    <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">${l.time} • Shift ${l.shift}</p>
+                </div>
+                <div class="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 px-3 py-1.5 rounded-xl text-[7px] font-black uppercase border">Masuk</div>
+            </div>`).join('') : '<div class="text-center py-10 opacity-30 text-[9px] font-black uppercase tracking-widest dark:text-white">Belum Ada Absen</div>';
     }
 
     function renderRekap() {
-        const now = new Date(); 
-        const year = now.getFullYear();
-        const month = now.getMonth();
+        const sel = document.getElementById('rekap-select-month');
+        const monthSel = sel?.value || `${new Date().getMonth()}-${new Date().getFullYear()}`;
+        const [month, year] = monthSel.split('-').map(Number);
+        
+        const now = new Date();
+        const isCurrentMonth = month === now.getMonth() && year === now.getFullYear();
         const today = now.getDate();
+        
         const daysInMonth = new Date(year, month + 1, 0).getDate();
         const searchTerm = document.getElementById('rekap-search')?.value.toLowerCase() || "";
         const shiftFilter = document.getElementById('rekap-filter-shift')?.value || "";
         
         document.getElementById('rekap-month-label').innerText = `${CONFIG.MONTHS[month]} ${year}`;
         
+        // Counter untuk statistik harian (kolom) dan perawat (baris)
+        const dailyStats = new Array(daysInMonth + 1).fill(0);
+        let grandTotal = 0;
+
         let html = `<table class="rekap-table"><thead><tr class="bg-slate-50 dark:bg-slate-800"><th class="sticky-left">Perawat</th>`;
         for(let i=1; i<=daysInMonth; i++) {
-            const isToday = i === today;
+            const isToday = isCurrentMonth && i === today;
             html += `<th class="${isToday ? 'today-col' : ''}">${i}</th>`;
         }
         html += `<th class="sticky-right">TOT</th></tr></thead><tbody>`;
@@ -542,14 +557,15 @@
             html += `<tr><td colspan="${daysInMonth + 2}" class="py-10 text-center opacity-30 italic text-[9px] uppercase tracking-widest dark:text-white">Data tidak ditemukan</td></tr>`;
         } else {
             filteredOfficers.forEach(name => {
-                let total = 0; 
+                let rowTotal = 0; 
                 let rowCells = "";
-                let hasLogMatch = false;
+                let hasRowData = false;
 
                 for(let d=1; d<=daysInMonth; d++) {
                     const formattedDay = d.toString().padStart(2, '0');
                     const formattedMonth = (month + 1).toString().padStart(2, '0');
                     const dateKey = `${formattedDay}/${formattedMonth}/${year}`;
+                    
                     const logs = state.data.logs.filter(l => l.name === name && l.date === dateKey);
                     
                     let char = '-';
@@ -560,19 +576,35 @@
                         if (shiftFilter === "" || log.shift === shiftFilter) {
                             char = log.shift.charAt(0).toUpperCase();
                             css = `code-${char}`;
-                            total++;
-                            hasLogMatch = true;
+                            rowTotal++;
+                            hasRowData = true;
+                            
+                            // Hitung statistik harian
+                            dailyStats[d]++;
+                            grandTotal++;
                         }
                     }
-                    rowCells += `<td class="${css} ${d === today ? 'today-col' : ''}">${char}</td>`;
+                    const isToday = isCurrentMonth && d === today;
+                    rowCells += `<td class="${css} ${isToday ? 'today-col' : ''}">${char}</td>`;
                 }
                 
-                if (shiftFilter === "" || hasLogMatch) {
-                    html += `<tr><td class="sticky-left uppercase font-black text-slate-700 dark:text-slate-300">${name}</td>${rowCells}<td class="sticky-right dark:text-teal-400 font-black">${total}</td></tr>`;
+                if (shiftFilter === "" || hasRowData) {
+                    html += `<tr><td class="sticky-left uppercase font-black text-slate-700 dark:text-slate-300">${name}</td>${rowCells}<td class="sticky-right dark:text-teal-400 font-black">${rowTotal}</td></tr>`;
                 }
             });
         }
-        document.getElementById('rekap-table-container').innerHTML = html + `</tbody></table>`;
+        
+        // Tambahkan Footer (Tfoot) untuk baris Total Jaga Per Hari
+        html += `</tbody><tfoot><tr>`;
+        html += `<td class="sticky-left uppercase font-black">Total Jaga</td>`;
+        for(let d=1; d<=daysInMonth; d++) {
+            const isToday = isCurrentMonth && d === today;
+            html += `<td class="${isToday ? 'today-col' : ''} font-black">${dailyStats[d] || ''}</td>`;
+        }
+        html += `<td class="sticky-right font-black bg-teal-600 text-white dark:bg-teal-500">${grandTotal}</td>`;
+        html += `</tr></tfoot></table>`;
+
+        document.getElementById('rekap-table-container').innerHTML = html;
     }
 
     async function initiateScan() {
@@ -602,10 +634,18 @@
 
     async function processScan() {
         document.getElementById('loading-overlay').classList.remove('hidden');
-        const shift = getShiftInfo(); const logicalDate = getLogicalDate();
-        const time = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+        const shift = getShiftInfo(); 
+        const logicalDate = getLogicalDate();
+        const time = getCurrentTimeString();
+        
         try {
-            const resp = await fetch(CONFIG.WEB_APP_URL, { method: 'POST', body: JSON.stringify({ action: 'saveScan', payload: { name: state.user, date: logicalDate, shift: shift.label, time: time } }) });
+            const resp = await fetch(CONFIG.WEB_APP_URL, { 
+                method: 'POST', 
+                body: JSON.stringify({ 
+                    action: 'saveScan', 
+                    payload: { name: state.user, date: logicalDate, shift: shift.label, time: time } 
+                }) 
+            });
             const res = await resp.json();
             if (res.status === 'success') { 
                 playSfx('success'); 
@@ -642,8 +682,9 @@
     function exportToExcel() {
         const table = document.getElementById('rekap-table-container').querySelector('table');
         if (!table) return showAlert("Gagal", "Data kosong", "error");
+        const monthLabel = document.getElementById('rekap-month-label').innerText;
         const wb = XLSX.utils.table_to_book(table); 
-        XLSX.writeFile(wb, `Rekap_Presensi_Perawat_${new Date().getTime()}.xlsx`);
+        XLSX.writeFile(wb, `Rekap_Presensi_${monthLabel.replace(/\s/g, '_')}.xlsx`);
     }
 
     function closeScanner() { 
@@ -656,7 +697,7 @@
         fetchData();
         setInterval(() => {
             const now = new Date();
-            document.getElementById('time-display').innerText = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+            document.getElementById('time-display').innerText = getCurrentTimeString();
             document.getElementById('date-display').innerText = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
         }, 1000);
         setInterval(() => fetchData(true), 60000);
