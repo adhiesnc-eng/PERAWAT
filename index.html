@@ -10,7 +10,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/html5-qrcode"></script>
-    <script src="./internal_assets/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     
     <script>
         tailwind.config = {
@@ -59,8 +59,8 @@
         .rekap-table { width: max-content; min-width: 100%; border-collapse: separate; border-spacing: 0; font-size: 0.7rem; }
         .rekap-table th { padding: 12px 8px; text-align: center; font-weight: 800; border-bottom: 1px solid #e2e8f0; white-space: nowrap; background: #f8fafc; }
         .dark .rekap-table th { background: #1e293b; border-bottom: 1px solid #334155; color: #f1f5f9; }
-        .rekap-table td { padding: 10px 4px; text-align: center; border-bottom: 1px solid #f1f5f9; font-weight: 700; }
-        .dark .rekap-table td { border-bottom: 1px solid #1e293b; }
+        .rekap-table td { padding: 10px 4px; text-align: center; border-bottom: 1px solid #f1f5f9; font-weight: 700; color: #334155; }
+        .dark .rekap-table td { border-bottom: 1px solid #1e293b; color: #cbd5e1; }
         
         .rekap-table tfoot td { background: #f1f5f9; font-weight: 900; color: #0d9488; border-top: 2px solid #0d9488; }
         .dark .rekap-table tfoot td { background: #1e293b; color: #2dd4bf; border-top: 2px solid #0d9488; }
@@ -101,14 +101,13 @@
             background: #1e293b !important; 
         }
         
-        .code-P { color: #0d9488; background: #f0fdfa; }
-        .code-S { color: #d97706; background: #fffbeb; }
-        .code-M { color: #2563eb; background: #eff6ff; }
+        .code-P { color: #0d9488 !important; background: #f0fdfa !important; }
+        .code-S { color: #d97706 !important; background: #fffbeb !important; }
+        .code-M { color: #2563eb !important; background: #eff6ff !important; }
         
         .schedule-content { max-height: none; overflow: visible; }
         .laser-line { position: absolute; left: 0; right: 0; height: 3px; background: #22c55e; box-shadow: 0 0 15px #22c55e, 0 0 30px #22c55e; animation: laser 2.5s infinite linear; z-index: 10; }
     </style>
-<meta name="theme-color" content="#3b82f6"><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-512.png">
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 transition-colors duration-500">
 
@@ -116,7 +115,7 @@
     <div class="relative w-24 h-24">
         <div class="absolute inset-0 border-4 border-teal-500/20 rounded-3xl"></div>
         <div class="absolute inset-0 border-4 border-teal-500 border-t-transparent rounded-3xl animate-spin"></div>
-        <div class="absolute inset-4 bg-teal-500/10 rounded-2xl animate-pulse flex items-center justify-center text-2xl"></div>
+        <div class="absolute inset-4 bg-teal-500/10 rounded-2xl animate-pulse flex items-center justify-center text-2xl">🏥</div>
     </div>
     <div class="mt-8 overflow-hidden rounded-full w-48 h-1 bg-slate-100 dark:bg-slate-800 relative">
         <div class="absolute inset-0 bg-gradient-to-r from-teal-500 to-emerald-400 animate-shimmer" style="width: 50%;"></div>
@@ -127,13 +126,11 @@
 <div class="fixed top-0 left-0 right-0 h-[var(--sat)] bg-teal-600 z-[1100]"></div>
 
 <div class="app-container mx-auto">
-    
     <header id="main-header" class="bg-teal-600 dark:bg-teal-900 px-6 pt-12 pb-6 rounded-b-[2.5rem] overflow-hidden shadow-xl">
         <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-20 -mt-20 blur-3xl pointer-events-none"></div>
-        
         <div class="relative z-10 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-white/20 glass-effect rounded-2xl flex items-center justify-center text-xl shadow-lg border border-white/20"></div>
+                <div class="w-10 h-10 bg-white/20 glass-effect rounded-2xl flex items-center justify-center text-xl shadow-lg border border-white/20">🏥</div>
                 <div>
                     <p class="text-[8px] font-black text-teal-100 uppercase tracking-widest leading-none">UPTD PUSKESMAS SAMPANAHAN</p>
                     <p class="text-[10px] font-bold text-white uppercase tracking-tighter">Desa Sampanahan Hilir</p>
@@ -143,14 +140,13 @@
                     </div>
                 </div>
             </div>
-            
             <div class="flex items-center gap-3">
                 <div class="text-right">
                     <h2 id="time-display" class="text-lg font-black text-white tabular-nums tracking-tighter leading-none">00:00</h2>
                     <p id="date-display" class="text-[7px] font-bold text-teal-200 uppercase tracking-widest opacity-80">---</p>
                 </div>
                 <button onclick="toggleDarkMode()" class="w-10 h-10 bg-white/10 glass-effect rounded-2xl flex items-center justify-center text-white border border-white/20 transition-transform active:scale-90">
-                    <span id="theme-icon"></span>
+                    <span id="theme-icon">🌙</span>
                 </button>
             </div>
         </div>
@@ -179,7 +175,6 @@
                     <span id="user-jaga-status" class="hidden px-3 py-1 bg-teal-500 text-white text-[7px] font-black rounded-full uppercase tracking-widest animate-pulse shadow-lg">Sedang Jaga</span>
                 </div>
             </div>
-
             <div class="mt-6 flex items-center justify-between px-2">
                 <p class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">Hadir Bulan Ini</p>
                 <div class="flex items-center gap-1.5 bg-teal-500/10 px-2.5 py-1 rounded-lg border border-teal-500/20">
@@ -200,12 +195,9 @@
                 Download Excel
             </button>
         </div>
-        
         <div class="bg-white/50 dark:bg-slate-900/50 glass-effect border border-white/20 dark:border-slate-800 p-2 rounded-2xl">
-            <select id="rekap-select-month" onchange="renderRekap()" class="w-full bg-transparent p-2 text-[10px] font-black uppercase tracking-widest outline-none dark:text-white appearance-none text-center">
-                </select>
+            <select id="rekap-select-month" onchange="renderRekap()" class="w-full bg-transparent p-2 text-[10px] font-black uppercase tracking-widest outline-none dark:text-white appearance-none text-center"></select>
         </div>
-
         <div class="grid grid-cols-2 gap-3 pb-2">
             <div class="relative">
                 <input type="text" id="rekap-search" oninput="renderRekap()" placeholder="Cari nama..." class="w-full bg-white/50 dark:bg-slate-900/50 glass-effect border border-white/20 dark:border-slate-800 p-3 rounded-2xl text-[10px] font-bold outline-none focus:ring-2 ring-teal-500/50 transition-all dark:text-white">
@@ -222,10 +214,9 @@
     </div>
 
     <div class="main-scroll bg-mesh" id="scroll-root">
-        
         <main id="view-home" class="px-6 mt-4 space-y-6">
             <section id="card-auth" class="bg-white/80 dark:bg-slate-900/80 glass-effect p-8 rounded-[2.5rem] shadow-xl border border-white/20 dark:border-slate-800/50 text-center relative z-20">
-                <div class="w-16 h-16 bg-teal-500/10 dark:bg-teal-500/20 text-teal-600 rounded-[1.5rem] flex items-center justify-center text-4xl mx-auto mb-6 shadow-inner animate-bounce"></div>
+                <div class="w-16 h-16 bg-teal-500/10 dark:bg-teal-500/20 text-teal-600 rounded-[1.5rem] flex items-center justify-center text-4xl mx-auto mb-6 shadow-inner animate-bounce">🏥</div>
                 <h3 class="font-extrabold text-slate-800 dark:text-slate-100 text-sm uppercase tracking-widest mb-1">Verifikasi Akun</h3>
                 <div class="space-y-4">
                     <select id="input-user" class="w-full bg-slate-50/50 dark:bg-slate-800/50 border-2 border-slate-100 dark:border-slate-700 p-4 rounded-2xl text-xs font-black outline-none appearance-none text-center focus:border-teal-500 transition-all dark:text-white">
@@ -234,11 +225,10 @@
                     <button onclick="handleLogin()" class="w-full bg-gradient-to-r from-teal-600 to-emerald-500 text-white py-4 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-teal-500/30 transition-all active:scale-95">Masuk Sesi</button>
                 </div>
             </section>
-
             <div id="dashboard-content" class="hidden space-y-8">
                 <section class="pb-10">
                     <div class="flex justify-between items-center mb-5 px-2">
-                        <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500"> Log Absen Harian</h3>
+                        <h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">📝 Log Absen Harian</h3>
                         <div class="flex items-center gap-2 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
                             <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
                             <span class="text-[8px] font-black text-emerald-500 uppercase tracking-widest">Live</span>
@@ -248,7 +238,6 @@
                 </section>
             </div>
         </main>
-
         <main id="view-rekap" class="hidden px-6 space-y-6 pt-2 pb-20">
             <div class="rekap-wrapper bg-white/50 dark:bg-slate-900/50 glass-effect border border-white/20 dark:border-slate-800 shadow-2xl" id="rekap-scroll-container">
                 <div id="rekap-table-container"></div>
@@ -276,13 +265,13 @@
 <div id="modal-scanner" class="fixed inset-0 z-[6000] hidden flex-col bg-black/90 backdrop-blur-2xl">
     <div class="px-6 pt-12 pb-6 flex justify-between items-center text-white">
         <div><h4 class="font-black text-lg tracking-tighter uppercase">Scan Presensi</h4><p class="text-[9px] text-teal-400 font-bold uppercase tracking-widest">Kamera Aktif</p></div>
-        <button onclick="closeScanner()" class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center"></button>
+        <button onclick="closeScanner()" class="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-xl">✕</button>
     </div>
     <div class="flex-1 flex flex-col items-center justify-center p-6"><div class="relative"><div id="qr-reader" class="w-[280px] h-[280px] bg-slate-950 rounded-[3rem] overflow-hidden border-4 border-white/20"></div><div class="laser-line"></div></div></div>
 </div>
 
 <div id="modal-success-presence" class="fixed inset-0 bg-white dark:bg-slate-950 z-[8000] hidden flex-col items-center justify-center text-center p-10">
-    <div class="w-32 h-32 bg-teal-500/10 text-teal-500 rounded-[2.5rem] flex items-center justify-center text-6xl mb-8 animate-bounce"></div>
+    <div class="w-32 h-32 bg-teal-500/10 text-teal-500 rounded-[2.5rem] flex items-center justify-center text-6xl mb-8 animate-bounce">✅</div>
     <h2 class="text-3xl font-black text-slate-800 dark:text-white uppercase tracking-tighter">Berhasil!</h2>
     <p id="success-nurse-name" class="text-xl font-bold text-teal-600 mt-3 uppercase tracking-widest"></p>
     <div class="mt-10 w-full max-w-xs bg-slate-50 dark:bg-slate-900 p-8 rounded-[3rem] border border-slate-100 dark:border-slate-800">
@@ -294,7 +283,7 @@
 
 <div id="alert-box" class="fixed top-8 left-6 right-6 z-[7000] transition-all duration-500 translate-y-[-150%] opacity-0 pointer-events-none">
     <div class="bg-white/90 dark:bg-slate-900/90 glass-effect p-4 rounded-3xl shadow-2xl flex items-center gap-4 border border-white/20 dark:border-slate-800">
-        <div id="alert-icon-bg" class="w-12 h-12 rounded-2xl flex items-center justify-center text-xl"></div>
+        <div id="alert-icon-bg" class="w-12 h-12 rounded-2xl flex items-center justify-center text-xl">🔔</div>
         <div class="flex-1"><h4 id="alert-title" class="text-[10px] font-black uppercase tracking-widest dark:text-white">Notifikasi</h4><p id="alert-msg" class="text-[10px] font-bold text-slate-500 dark:text-slate-400 mt-0.5"></p></div>
     </div>
 </div>
@@ -304,15 +293,14 @@
         WEB_APP_URL: "https://script.google.com/macros/s/AKfycbw-Fl_qSNgqr9oEnn3vUmCtN4bRCZ5M7wz5YMiofUD33pN-kICuL6zubelKVcI_k2luXg/exec",
         DEFAULT_QR: "UGD-SAMPANAHAN-SCAN",
         MONTHS: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
-        // Titik Lokasi UGD Sampanahan
         TARGET_LAT: -2.637022,
         TARGET_LNG: 116.203674,
-        RADIUS: 100 // Meter
+        RADIUS: 100
     };
 
     let state = {
         user: localStorage.getItem('nurse_session_name') || null,
-        data: { officers: [], logs: [], schedule: {}, config: { voice: true, popup: true, gpsLock: true } },
+        data: { officers: [], logs: [], schedule: {}, config: { voice: true, popup: true, gpsLock: true, radius: 100 } },
         isWithinRadius: true,
         darkMode: localStorage.getItem('theme') === 'dark',
         scanner: null,
@@ -321,53 +309,47 @@
 
     function initAudio() { if (!state.audioContext) state.audioContext = new (window.AudioContext || window.webkitAudioContext)(); }
     function playSfx(type) {
-        initAudio(); const ctx = state.audioContext; const osc = ctx.createOscillator(); const gain = ctx.createGain();
-        osc.connect(gain); gain.connect(ctx.destination); const now = ctx.currentTime;
-        if (type === 'ping') {
-            osc.frequency.setValueAtTime(880, now); gain.gain.setValueAtTime(0.1, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
-            osc.start(now); osc.stop(now + 0.2);
-        } else if (type === 'error') {
-            osc.type = 'square'; osc.frequency.setValueAtTime(220, now); gain.gain.setValueAtTime(0.1, now); gain.gain.linearRampToValueAtTime(0, now + 0.3);
-            osc.start(now); osc.stop(now + 0.3);
-        } else if (type === 'success') {
-            [523.25, 659.25, 783.99].forEach((f, i) => {
-                const o = ctx.createOscillator(); const g = ctx.createGain(); o.connect(g); g.connect(ctx.destination);
-                o.frequency.setValueAtTime(f, now + (i * 0.1)); g.gain.setValueAtTime(0.05, now + (i * 0.1)); g.gain.exponentialRampToValueAtTime(0.01, now + (i * 0.1) + 0.3);
-                o.start(now + (i * 0.1)); o.stop(now + (i * 0.1) + 0.3);
-            });
-        }
+        try {
+            initAudio(); const ctx = state.audioContext; const osc = ctx.createOscillator(); const gain = ctx.createGain();
+            osc.connect(gain); gain.connect(ctx.destination); const now = ctx.currentTime;
+            if (type === 'ping') {
+                osc.frequency.setValueAtTime(880, now); gain.gain.setValueAtTime(0.1, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+                osc.start(now); osc.stop(now + 0.2);
+            } else if (type === 'error') {
+                osc.type = 'square'; osc.frequency.setValueAtTime(220, now); gain.gain.setValueAtTime(0.1, now); gain.gain.linearRampToValueAtTime(0, now + 0.3);
+                osc.start(now); osc.stop(now + 0.3);
+            } else if (type === 'success') {
+                [523.25, 659.25, 783.99].forEach((f, i) => {
+                    const o = ctx.createOscillator(); const g = ctx.createGain(); o.connect(g); g.connect(ctx.destination);
+                    o.frequency.setValueAtTime(f, now + (i * 0.1)); g.gain.setValueAtTime(0.05, now + (i * 0.1)); g.gain.exponentialRampToValueAtTime(0.01, now + (i * 0.1) + 0.3);
+                    o.start(now + (i * 0.1)); o.stop(now + (i * 0.1) + 0.3);
+                });
+            }
+        } catch (e) {}
     }
     function triggerHaptic(t = 20) { if (navigator.vibrate) navigator.vibrate(t); }
 
     function populateMonthSelector() {
         const sel = document.getElementById('rekap-select-month');
         if (!sel || sel.options.length > 0) return;
-        
         const now = new Date();
-        const currentYear = now.getFullYear();
-        const currentMonth = now.getMonth();
-
         for (let i = 0; i < 12; i++) {
-            const d = new Date(currentYear, currentMonth - i, 1);
+            const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
             const opt = document.createElement('option');
             opt.value = `${d.getMonth()}-${d.getFullYear()}`;
             opt.innerText = `${CONFIG.MONTHS[d.getMonth()]} ${d.getFullYear()}`;
             sel.appendChild(opt);
         }
-        sel.value = `${currentMonth}-${currentYear}`;
     }
 
     function showView(v) {
         triggerHaptic(15);
         document.getElementById('view-home').classList.toggle('hidden', v !== 'home');
         document.getElementById('view-rekap').classList.toggle('hidden', v !== 'rekap');
-        
         const profile = document.getElementById('profile-card');
         const rekapHeader = document.getElementById('rekap-header-controls');
-        
         if (state.user && v === 'home') profile.classList.remove('hidden');
         else profile.classList.add('hidden');
-
         if (v === 'rekap') {
             rekapHeader.classList.remove('hidden');
             populateMonthSelector();
@@ -376,7 +358,6 @@
         } else {
             rekapHeader.classList.add('hidden');
         }
-
         const navHome = document.getElementById('nav-home');
         const navRekap = document.getElementById('nav-rekap');
         if (v === 'home') {
@@ -386,23 +367,17 @@
             navHome.className = 'flex-1 py-4 flex flex-col items-center gap-1 rounded-[1.5rem] text-slate-400 transition-all';
             navRekap.className = 'flex-1 py-4 flex flex-col items-center gap-1 rounded-[1.5rem] text-teal-600 bg-teal-500/10 transition-all';
         }
-        document.getElementById('scroll-root').scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function scrollToToday() {
         const sel = document.getElementById('rekap-select-month');
-        if(!sel) return;
-        const monthSel = sel.value;
-        const [m, y] = monthSel.split('-').map(Number);
+        if(!sel || !sel.value) return;
+        const [m, y] = sel.value.split('-').map(Number);
         const now = new Date();
-        
         if (m === now.getMonth() && y === now.getFullYear()) {
             const todayCell = document.querySelector('.today-col');
             const wrapper = document.getElementById('rekap-scroll-container');
-            if (wrapper && todayCell) {
-                const offset = todayCell.offsetLeft - (wrapper.clientWidth / 2);
-                wrapper.scrollLeft = offset;
-            }
+            if (wrapper && todayCell) wrapper.scrollLeft = todayCell.offsetLeft - (wrapper.clientWidth / 2);
         }
     }
 
@@ -412,10 +387,10 @@
         document.getElementById('alert-title').innerText = title;
         document.getElementById('alert-msg').innerText = msg;
         if(type === 'success') {
-            iconBg.className = "w-12 h-12 rounded-2xl flex items-center justify-center text-xl bg-teal-500/10 text-teal-600"; iconBg.innerText = '';
+            iconBg.className = "w-12 h-12 rounded-2xl flex items-center justify-center text-xl bg-teal-500/10 text-teal-600"; iconBg.innerText = '🔔';
             playSfx('ping'); triggerHaptic(30);
         } else {
-            iconBg.className = "w-12 h-12 rounded-2xl flex items-center justify-center text-xl bg-rose-500/10 text-rose-500"; iconBg.innerText = '';
+            iconBg.className = "w-12 h-12 rounded-2xl flex items-center justify-center text-xl bg-rose-500/10 text-rose-500"; iconBg.innerText = '⚠️';
             playSfx('error'); triggerHaptic(100);
         }
         box.style.transform = 'translateY(0)'; box.style.opacity = '1';
@@ -426,18 +401,17 @@
         triggerHaptic(20);
         state.darkMode = !state.darkMode; localStorage.setItem('theme', state.darkMode ? 'dark' : 'light');
         document.documentElement.classList.toggle('dark', state.darkMode);
-        document.getElementById('theme-icon').innerText = state.darkMode ? '' : '';
+        document.getElementById('theme-icon').innerText = state.darkMode ? '☀️' : '🌙';
     }
 
     async function fetchData(silent = false) {
         try {
             const resp = await fetch(`${CONFIG.WEB_APP_URL}?action=getData`);
-            state.data = await resp.json();
+            const json = await resp.json();
+            state.data = json;
             renderDashboard();
             if (state.user) checkGPS();
-            if (!document.getElementById('view-rekap').classList.contains('hidden')) {
-                renderRekap();
-            }
+            if (!document.getElementById('view-rekap').classList.contains('hidden')) renderRekap();
         } catch (e) { if(!silent) showAlert("Error", "Gagal sinkron database", "error"); }
         finally { document.getElementById('loading-overlay').classList.add('hidden'); }
     }
@@ -446,7 +420,8 @@
         const val = document.getElementById('input-user').value;
         if (!val) return showAlert("Peringatan", "Pilih nama perawat!", "error");
         state.user = val; localStorage.setItem('nurse_session_name', val);
-        showAlert("Berhasil", `Sesi ${val} aktif`); renderDashboard();
+        showAlert("Berhasil", `Sesi ${val} aktif`); 
+        renderDashboard();
         checkGPS();
     }
 
@@ -473,57 +448,40 @@
 
     function renderDashboard() {
         const info = getShiftInfo(); const logicalDate = getLogicalDate();
-        document.getElementById('user-greeting').innerText = state.user ? state.user : "-";
-        
+        document.getElementById('user-greeting').innerText = state.user || "-";
         document.getElementById('card-auth').classList.toggle('hidden', !!state.user);
         document.getElementById('dashboard-content').classList.toggle('hidden', !state.user);
-        
-        const profile = document.getElementById('profile-card');
-        profile.classList.toggle('hidden', !state.user);
-        
         document.getElementById('header-shift-name').innerText = `Shift ${info.label}`;
-
         const sel = document.getElementById('input-user');
-        sel.innerHTML = `<option value="">-- Pilih Akun --</option>` + state.data.officers.map(o => `<option value="${o}">${o}</option>`).join('');
-
+        if (sel.options.length <= 1 && state.data.officers.length > 0) {
+            sel.innerHTML = `<option value="">-- Pilih Akun --</option>` + state.data.officers.map(o => `<option value="${o}">${o}</option>`).join('');
+        }
         if(state.user) {
             document.getElementById('nurse-full-name').innerText = state.user;
             document.getElementById('nurse-initial').innerText = state.user.charAt(0);
-            
-            const [currentDay, currentMonth, currentYear] = logicalDate.split('/');
-            const currentMonthKey = `/${currentMonth}/${currentYear}`;
-            
-            const monthlyLogsUser = state.data.logs.filter(l => 
-                l.name === state.user && 
-                l.date.includes(currentMonthKey)
-            );
-            
-            document.getElementById('stat-total-life').innerText = monthlyLogsUser.length;
-
+            const [d, m, y] = logicalDate.split('/');
+            const monthKey = `/${m}/${y}`;
+            const monthlyLogs = state.data.logs.filter(l => l.name === state.user && l.date.includes(monthKey));
+            document.getElementById('stat-total-life').innerText = monthlyLogs.length;
             const statusBadge = document.getElementById('user-jaga-status');
-            const userLogsToday = state.data.logs.filter(l => l.name === state.user && l.date === logicalDate);
-            const isCurrentlyJaga = userLogsToday.some(l => l.shift === info.label);
-            
-            if(isCurrentlyJaga) {
-                statusBadge.classList.remove('hidden');
+            const todayLogs = state.data.logs.filter(l => l.name === state.user && l.date === logicalDate);
+            if(todayLogs.some(l => l.shift === info.label)) {
                 statusBadge.innerText = "Sedang Jaga";
                 statusBadge.className = "px-3 py-1 bg-teal-500 text-white text-[7px] font-black rounded-full uppercase tracking-widest animate-pulse shadow-lg";
-            } else if(userLogsToday.length > 0) {
                 statusBadge.classList.remove('hidden');
+            } else if(todayLogs.length > 0) {
                 statusBadge.innerText = "Selesai Jaga";
-                statusBadge.className = "px-3 py-1 bg-slate-400 text-white text-[7px] font-black rounded-full uppercase tracking-widest shadow-lg opacity-80";
-            } else {
-                statusBadge.classList.add('hidden');
-            }
+                statusBadge.className = "px-3 py-1 bg-slate-400 text-white text-[7px] font-black rounded-full uppercase tracking-widest shadow-lg";
+                statusBadge.classList.remove('hidden');
+            } else { statusBadge.classList.add('hidden'); }
         }
-
         const lToday = state.data.logs.filter(l => l.date === logicalDate).sort((a, b) => b.time.localeCompare(a.time));
         document.getElementById('live-log-container').innerHTML = lToday.length ? lToday.map(l => `
             <div class="bg-white/40 dark:bg-slate-900/40 glass-effect p-4 rounded-[1.5rem] border border-white/20 dark:border-slate-800 flex items-center gap-4">
                 <div class="w-10 h-10 bg-slate-100 dark:bg-slate-800 text-slate-400 rounded-xl flex items-center justify-center font-black text-xs uppercase">${l.name.charAt(0)}</div>
                 <div class="flex-1">
                     <p class="text-[10px] font-black text-slate-800 dark:text-slate-200 uppercase tracking-tight">${l.name}</p>
-                    <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">${l.time} � Shift ${l.shift}</p>
+                    <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">${l.time} • Shift ${l.shift}</p>
                 </div>
                 <div class="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 px-3 py-1.5 rounded-xl text-[7px] font-black uppercase border">Masuk</div>
             </div>`).join('') : '<div class="text-center py-10 opacity-30 text-[9px] font-black uppercase tracking-widest dark:text-white">Belum Ada Absen</div>';
@@ -531,221 +489,132 @@
 
     function renderRekap() {
         const sel = document.getElementById('rekap-select-month');
-        const monthSel = sel?.value || `${new Date().getMonth()}-${new Date().getFullYear()}`;
-        const [month, year] = monthSel.split('-').map(Number);
-        
-        const now = new Date();
-        const isCurrentMonth = month === now.getMonth() && year === now.getFullYear();
-        const today = now.getDate();
-        
+        if(!sel.value) return;
+        const [month, year] = sel.value.split('-').map(Number);
         const daysInMonth = new Date(year, month + 1, 0).getDate();
-        const searchTerm = document.getElementById('rekap-search')?.value.toLowerCase() || "";
-        const shiftFilter = document.getElementById('rekap-filter-shift')?.value || "";
-        
+        const search = document.getElementById('rekap-search').value.toLowerCase();
+        const filterShift = document.getElementById('rekap-filter-shift').value;
+        const now = new Date();
+        const isCurrentMonth = (now.getMonth() === month && now.getFullYear() === year);
         document.getElementById('rekap-month-label').innerText = `${CONFIG.MONTHS[month]} ${year}`;
-        
-        const dailyStats = new Array(daysInMonth + 1).fill(0);
-        let grandTotal = 0;
-
-        let html = `<table class="rekap-table"><thead><tr class="bg-slate-50 dark:bg-slate-800"><th class="sticky-left">Perawat</th>`;
-        for(let i=1; i<=daysInMonth; i++) {
-            const isToday = isCurrentMonth && i === today;
-            html += `<th class="${isToday ? 'today-col' : ''}">${i}</th>`;
-        }
+        let html = `<table class="rekap-table" id="table-to-export"><thead><tr><th class="sticky-left">Nama Perawat</th>`;
+        for(let i=1; i<=daysInMonth; i++) html += `<th class="${isCurrentMonth && i === now.getDate() ? 'today-col' : ''}">${i}</th>`;
         html += `<th class="sticky-right">TOT</th></tr></thead><tbody>`;
-        
-        const filteredOfficers = state.data.officers.filter(o => o.toLowerCase().includes(searchTerm)).sort();
-        
-        if (filteredOfficers.length === 0) {
-            html += `<tr><td colspan="${daysInMonth + 2}" class="py-10 text-center opacity-30 italic text-[9px] uppercase tracking-widest dark:text-white">Data tidak ditemukan</td></tr>`;
-        } else {
-            filteredOfficers.forEach(name => {
-                let rowTotal = 0; 
-                let rowCells = "";
-                let hasRowData = false;
-
-                for(let d=1; d<=daysInMonth; d++) {
-                    const formattedDay = d.toString().padStart(2, '0');
-                    const formattedMonth = (month + 1).toString().padStart(2, '0');
-                    const dateKey = `${formattedDay}/${formattedMonth}/${year}`;
-                    
-                    const logs = state.data.logs.filter(l => l.name === name && l.date === dateKey);
-                    
-                    let char = '-';
-                    let css = 'opacity-20 dark:text-slate-700';
-
-                    if (logs.length > 0) {
-                        const log = logs[0]; 
-                        if (shiftFilter === "" || log.shift === shiftFilter) {
-                            char = log.shift.charAt(0).toUpperCase();
-                            css = `code-${char}`;
-                            rowTotal++;
-                            hasRowData = true;
-                            dailyStats[d]++;
-                            grandTotal++;
-                        }
+        const dailyTotals = new Array(daysInMonth + 1).fill(0);
+        let grandTotal = 0;
+        const filteredOfficers = state.data.officers.filter(o => o.toLowerCase().includes(search)).sort();
+        filteredOfficers.forEach(name => {
+            let rowTotal = 0;
+            let cells = "";
+            let hasDataInRow = false;
+            for(let d=1; d<=daysInMonth; d++) {
+                const dateStr = `${d.toString().padStart(2,'0')}/${(month+1).toString().padStart(2,'0')}/${year}`;
+                const log = state.data.logs.find(l => l.name === name && l.date === dateStr);
+                let char = '-', css = 'opacity-20';
+                if(log) {
+                    if(!filterShift || log.shift === filterShift) {
+                        char = log.shift.charAt(0);
+                        css = `code-${char}`;
+                        rowTotal++;
+                        dailyTotals[d]++;
+                        grandTotal++;
+                        hasDataInRow = true;
                     }
-                    const isToday = isCurrentMonth && d === today;
-                    rowCells += `<td class="${css} ${isToday ? 'today-col' : ''}">${char}</td>`;
                 }
-                
-                if (shiftFilter === "" || hasRowData) {
-                    html += `<tr><td class="sticky-left uppercase font-black text-slate-700 dark:text-slate-300">${name}</td>${rowCells}<td class="sticky-right dark:text-teal-400 font-black">${rowTotal}</td></tr>`;
-                }
-            });
-        }
-        
-        html += `</tbody><tfoot><tr>`;
-        html += `<td class="sticky-left uppercase font-black">Total Jaga</td>`;
-        for(let d=1; d<=daysInMonth; d++) {
-            const isToday = isCurrentMonth && d === today;
-            html += `<td class="${isToday ? 'today-col' : ''} font-black">${dailyStats[d] || ''}</td>`;
-        }
-        html += `<td class="sticky-right font-black bg-teal-600 text-white dark:bg-teal-500">${grandTotal}</td>`;
-        html += `</tr></tfoot></table>`;
-
+                cells += `<td class="${css} ${isCurrentMonth && d === now.getDate() ? 'today-col' : ''}">${char}</td>`;
+            }
+            if(!filterShift || hasDataInRow) html += `<tr><td class="sticky-left uppercase font-black">${name}</td>${cells}<td class="sticky-right">${rowTotal}</td></tr>`;
+        });
+        html += `</tbody><tfoot><tr><td class="sticky-left">TOTAL</td>`;
+        for(let d=1; d<=daysInMonth; d++) html += `<td class="${isCurrentMonth && d === now.getDate() ? 'today-col' : ''}">${dailyTotals[d] || ''}</td>`;
+        html += `<td class="sticky-right">${grandTotal}</td></tr></tfoot></table>`;
         document.getElementById('rekap-table-container').innerHTML = html;
+    }
+
+    function checkGPS() {
+        if (!state.user || !state.data.config.gpsLock) {
+            state.isWithinRadius = true;
+            document.getElementById('gps-dot').className = "w-1.5 h-1.5 rounded-full bg-emerald-400";
+            document.getElementById('gps-text').innerText = state.user ? "GPS Lock Off" : "Sesi Tidak Aktif";
+            return;
+        }
+        navigator.geolocation.getCurrentPosition(pos => {
+            const R = 6371e3;
+            const φ1 = pos.coords.latitude * Math.PI/180;
+            const φ2 = CONFIG.TARGET_LAT * Math.PI/180;
+            const Δφ = (CONFIG.TARGET_LAT - pos.coords.latitude) * Math.PI/180;
+            const Δλ = (CONFIG.TARGET_LNG - pos.coords.longitude) * Math.PI/180;
+            const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ/2) * Math.sin(Δλ/2);
+            const dist = R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            state.isWithinRadius = dist <= (state.data.config.radius || CONFIG.RADIUS);
+            const dot = document.getElementById('gps-dot');
+            const txt = document.getElementById('gps-text');
+            if(state.isWithinRadius) {
+                dot.className = "w-1.5 h-1.5 rounded-full bg-emerald-400";
+                txt.innerText = "Lokasi Valid";
+            } else {
+                dot.className = "w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse";
+                txt.innerText = `${Math.round(dist)}m Luar Area`;
+            }
+        }, (err) => {
+            state.isWithinRadius = false;
+            document.getElementById('gps-text').innerText = "GPS Lemah/Mati";
+            document.getElementById('gps-dot').className = "w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse";
+        }, { enableHighAccuracy: true, timeout: 5000 });
     }
 
     async function initiateScan() {
         if (!state.user) return showAlert("Akses Ditolak", "Pilih akun perawat dulu", "error");
-        
-        const dot = document.getElementById('gps-dot');
-        const text = document.getElementById('gps-text');
-        text.innerText = "Memverifikasi Lokasi...";
-        
-        checkGPS();
-        
-        setTimeout(async () => {
-            if (state.data.config.gpsLock && !state.isWithinRadius) {
-                 return showAlert("Lokasi Gagal", "Pastikan GPS Aktif & Anda berada di area UGD Sampanahan", "error");
-            }
-            
-            const lDate = getLogicalDate(); const shift = getShiftInfo();
-            if (state.data.logs.some(l => l.name === state.user && l.date === lDate && l.shift === shift.label)) return showAlert("Info", `Shift ${shift.label} sudah diabsen`, "error");
-            
-            document.getElementById('modal-scanner').classList.remove('hidden');
-            state.scanner = new Html5Qrcode("qr-reader");
-            try {
-                await state.scanner.start({ facingMode: "environment" }, { fps: 20, qrbox: 250 }, async (txt) => {
-                    if (txt === (state.data.config.qrData || CONFIG.DEFAULT_QR)) { 
-                        await state.scanner.stop(); 
-                        state.scanner = null; 
-                        document.getElementById('modal-scanner').classList.add('hidden'); 
-                        processScan(); 
-                    } else { 
-                        showAlert("QR Gagal", "QR Code tidak valid", "error"); 
-                    }
-                });
-            } catch (e) { 
-                showAlert("Error", "Gagal akses kamera", "error"); 
-                closeScanner(); 
-            }
-        }, 800);
+        if (state.data.config.gpsLock && !state.isWithinRadius) return showAlert("Lokasi Gagal", "Anda di luar area UGD Sampanahan", "error");
+        const shift = getShiftInfo(); const lDate = getLogicalDate();
+        if (state.data.logs.some(l => l.name === state.user && l.date === lDate && l.shift === shift.label)) {
+            return showAlert("Info", `Shift ${shift.label} sudah diabsen`, "error");
+        }
+        document.getElementById('modal-scanner').classList.remove('hidden');
+        state.scanner = new Html5Qrcode("qr-reader");
+        try {
+            await state.scanner.start({ facingMode: "environment" }, { fps: 20, qrbox: 250 }, (txt) => {
+                if (txt === (state.data.config.qrData || CONFIG.DEFAULT_QR)) {
+                    state.scanner.stop().then(() => {
+                        document.getElementById('modal-scanner').classList.add('hidden');
+                        processScan();
+                    });
+                } else { showAlert("QR Gagal", "QR Code tidak valid", "error"); }
+            });
+        } catch (e) { showAlert("Error", "Gagal akses kamera", "error"); closeScanner(); }
     }
 
     async function processScan() {
         document.getElementById('loading-overlay').classList.remove('hidden');
-        const shift = getShiftInfo(); 
-        const logicalDate = getLogicalDate();
-        const time = getCurrentTimeString();
-        
+        const payload = { name: state.user, date: getLogicalDate(), shift: getShiftInfo().label, time: getCurrentTimeString() };
         try {
-            const resp = await fetch(CONFIG.WEB_APP_URL, { 
-                method: 'POST', 
-                body: JSON.stringify({ 
-                    action: 'saveScan', 
-                    payload: { name: state.user, date: logicalDate, shift: shift.label, time: time } 
-                }) 
-            });
+            const resp = await fetch(CONFIG.WEB_APP_URL, { method: 'POST', body: JSON.stringify({ action: 'saveScan', payload }) });
             const res = await resp.json();
-            if (res.status === 'success') { 
-                playSfx('success'); 
-                document.getElementById('success-nurse-name').innerText = state.user; 
-                document.getElementById('success-time').innerText = time; 
-                document.getElementById('success-shift').innerText = `SHIFT ${shift.label.toUpperCase()}`; 
-                document.getElementById('modal-success-presence').classList.remove('hidden'); 
-                fetchData(true); 
-            } else { 
-                showAlert("Gagal", res.message, "error"); 
-            }
+            if (res.status === 'success') {
+                playSfx('success');
+                document.getElementById('success-nurse-name').innerText = state.user;
+                document.getElementById('success-time').innerText = payload.time;
+                document.getElementById('success-shift').innerText = `SHIFT ${payload.shift.toUpperCase()}`;
+                document.getElementById('modal-success-presence').classList.remove('hidden');
+                fetchData(true);
+            } else showAlert("Gagal", res.message, "error");
         } catch (e) { showAlert("Koneksi", "Server tidak merespon", "error"); }
         finally { document.getElementById('loading-overlay').classList.add('hidden'); }
     }
 
-    function checkGPS() {
-        const dot = document.getElementById('gps-dot'); 
-        const text = document.getElementById('gps-text');
-
-        if (!state.user) {
-            dot.className = "w-1.5 h-1.5 rounded-full bg-slate-400";
-            text.innerText = "Sesi Tidak Aktif";
-            return;
-        }
-
-        if (!state.data.config.gpsLock) { 
-            state.isWithinRadius = true; 
-            dot.className = "w-1.5 h-1.5 rounded-full bg-emerald-400"; 
-            text.innerText = "GPS Lock Off"; 
-            return; 
-        }
-
-        const geoOptions = { 
-            enableHighAccuracy: true, 
-            timeout: 15000,
-            maximumAge: 0   
-        };
-
-        navigator.geolocation.getCurrentPosition(pos => {
-            const R = 6371e3; 
-            const targetLat = CONFIG.TARGET_LAT;
-            const targetLng = CONFIG.TARGET_LNG;
-            const dLat = (pos.coords.latitude - targetLat) * Math.PI/180;
-            const dLon = (pos.coords.longitude - targetLng) * Math.PI/180;
-            const a = Math.sin(dLat/2)**2 + Math.cos(pos.coords.latitude*Math.PI/180)*Math.cos(targetLat*Math.PI/180)*Math.sin(dLon/2)**2;
-            const dist = R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-            
-            const maxRadius = state.data.config.radius || CONFIG.RADIUS;
-            state.isWithinRadius = dist <= maxRadius;
-
-            if (state.isWithinRadius) { 
-                dot.className = "w-1.5 h-1.5 rounded-full bg-emerald-400"; 
-                text.innerText = "Lokasi Valid"; 
-            } else { 
-                dot.className = "w-1.5 h-1.5 rounded-full bg-rose-400 animate-pulse"; 
-                text.innerText = `${Math.round(dist)}m Luar Area`; 
-            }
-        }, (err) => {
-            state.isWithinRadius = false;
-            dot.className = "w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse";
-            
-            switch(err.code) {
-                case err.PERMISSION_DENIED:
-                    text.innerText = "Izin GPS Ditolak";
-                    break;
-                case err.POSITION_UNAVAILABLE:
-                    text.innerText = "Sinyal GPS Lemah";
-                    break;
-                case err.TIMEOUT:
-                    text.innerText = "GPS Timeout (Cek HP)";
-                    break;
-                default:
-                    text.innerText = "GPS Bermasalah";
-            }
-        }, geoOptions);
-    }
-
     function exportToExcel() {
-        const table = document.getElementById('rekap-table-container').querySelector('table');
-        if (!table) return showAlert("Gagal", "Data kosong", "error");
-        const monthLabel = document.getElementById('rekap-month-label').innerText;
-        const wb = XLSX.utils.table_to_book(table); 
-        XLSX.writeFile(wb, `Rekap_Presensi_${monthLabel.replace(/\s/g, '_')}.xlsx`);
+        try {
+            const table = document.getElementById('table-to-export');
+            if (!table) return showAlert("Gagal", "Data kosong", "error");
+            const monthLabel = document.getElementById('rekap-month-label').innerText;
+            const wb = XLSX.utils.table_to_book(table);
+            XLSX.writeFile(wb, `Presensi_Sampanahan_${monthLabel.replace(/\s/g, '_')}.xlsx`);
+        } catch(e) { showAlert("Error", "Gagal export file", "error"); }
     }
 
     function closeScanner() { 
+        if(state.scanner) state.scanner.stop().catch(() => {}); 
         document.getElementById('modal-scanner').classList.add('hidden'); 
-        if(state.scanner) state.scanner.stop(); 
     }
 
     window.onload = () => {
@@ -757,9 +626,8 @@
             document.getElementById('date-display').innerText = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
         }, 1000);
         setInterval(() => fetchData(true), 60000);
-        setInterval(() => checkGPS(), 20000); 
+        setInterval(checkGPS, 15000);
     };
 </script>
-<script>if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');</script>
 </body>
 </html>
