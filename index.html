@@ -166,13 +166,15 @@
             <div id="header-profile-section" class="flex items-start justify-between gap-4">
                 <div class="flex items-center gap-4 flex-1 min-w-0">
                     <div class="relative group flex-shrink-0">
-                        <div id="nurse-initial" class="w-16 h-16 bg-teal-500 dark:bg-slate-800 text-white dark:text-teal-400 rounded-[1.8rem] flex items-center justify-center text-2xl font-black shadow-2xl border-4 border-white/20">?</div>
-                        <button onclick="logout()" id="btn-logout-header" class="absolute -bottom-1 -right-1 w-7 h-7 bg-rose-500 text-white rounded-xl border-2 border-white dark:border-slate-950 flex items-center justify-center shadow-lg active:scale-90 transition-transform">
+                        <!-- Komponen Dinamis Gambar/Inisial Profil Terintegrasi -->
+                        <div id="nurse-profile-wrapper" class="w-16 h-16 bg-teal-500 dark:bg-slate-800 rounded-[1.8rem] flex items-center justify-center shadow-2xl border-4 border-white/20 overflow-hidden">
+                            <span id="nurse-initial" class="text-white dark:text-teal-400 text-2xl font-black">?</span>
+                        </div>
+                        <button onclick="logout()" id="btn-logout-header" class="absolute -bottom-1 -right-1 w-7 h-7 bg-rose-500 text-white rounded-xl border-2 border-white dark:border-slate-950 flex items-center justify-center shadow-lg active:scale-90 transition-transform z-50">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                         </button>
                     </div>
                     <div class="min-w-0 flex-1">
-                        <!-- Perbaikan Visual Nama Panjang Halaman Profil Beranda -->
                         <h1 id="user-greeting" class="text-sm font-black text-slate-800 dark:text-white leading-tight uppercase tracking-tight max-w-[210px] break-words line-clamp-2">-</h1>
                         <p id="user-nip" class="text-[9px] font-bold text-teal-600 dark:text-teal-400 mt-1 tracking-tight truncate">-</p>
                         <p id="nurse-full-name" class="text-[8px] font-black text-slate-400 uppercase tracking-widest mt-0.5">Sesi Aktif</p>
@@ -313,7 +315,7 @@
                 osc.frequency.setValueAtTime(880, now); gain.gain.setValueAtTime(0.1, now); gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
                 osc.start(now); osc.stop(now + 0.2);
             } else if (type === 'error') {
-                osc.type = 'square'; osc.frequency.setValueAtTime(220, now); gain.gain.setValueAtTime(0.1, now); gain.gain.linearRampToValueAtTime(0, now + 0.3);
+                osc.type = 'square'; osc.frequency.setValueAtTime(220, now); gain.gain.setValueAtTime(0.1, now); gain.linearRampToValueAtTime(0, now + 0.3);
                 osc.start(now); osc.stop(now + 0.3);
             } else if (type === 'success') {
                 [523.25, 659.25, 783.99].forEach((f, i) => {
@@ -430,6 +432,7 @@
         if(!confirm("Logout dari sesi ini?")) return;
         state.user = null; localStorage.removeItem('nurse_session_name'); 
         document.getElementById('user-nip').innerText = "-"; 
+        document.getElementById('nurse-profile-wrapper').innerHTML = `<span id="nurse-initial" class="text-white dark:text-teal-400 text-2xl font-black">?</span>`;
         renderDashboard(); 
     }
 
@@ -465,15 +468,21 @@
             const currentOfficer = state.data.officers.find(o => o.name === state.user);
             if (currentOfficer) {
                 document.getElementById('user-nip').innerText = `NIP/NRPK: ${currentOfficer.nip}`;
+                
+                // RENDER FOTO PROFIL DINAMIS KEBERSAMAAN
+                const wrapper = document.getElementById('nurse-profile-wrapper');
+                if (currentOfficer.photo && currentOfficer.photo.trim() !== "" && currentOfficer.photo !== "-") {
+                    wrapper.innerHTML = `<img src="${currentOfficer.photo}" class="w-full h-full object-cover" onerror="this.src='', this.parentNode.innerHTML='<span class=\'text-white dark:text-teal-400 text-2xl font-black\'>${state.user.charAt(0)}</span>'"/>`;
+                } else {
+                    wrapper.innerHTML = `<span id="nurse-initial" class="text-white dark:text-teal-400 text-2xl font-black">${state.user.charAt(0)}</span>`;
+                }
             } else {
                 document.getElementById('user-nip').innerText = "-";
             }
             
-            // PERBAIKAN: Memperbaiki deteksi kapital properti dinamis (config.version) dari server agar tidak undefined
             const serverVersion = (state.data.config && state.data.config.version) ? state.data.config.version : "PWA";
             document.getElementById('nurse-full-name').innerText = `Sesi Aktif`;
             document.getElementById('app-version-badge').innerText = serverVersion;
-            document.getElementById('nurse-initial').innerText = state.user.charAt(0);
             
             const [d, m, y] = logicalDate.split('/');
             const monthKey = `/${m}/${y}`;
@@ -491,16 +500,26 @@
                 statusBadge.classList.remove('hidden');
             } else { statusBadge.classList.add('hidden'); }
         }
+        
         const lToday = state.data.logs.filter(l => l.date === logicalDate).sort((a, b) => b.time.localeCompare(a.time));
-        document.getElementById('live-log-container').innerHTML = lToday.length ? lToday.map(l => `
+        
+        document.getElementById('live-log-container').innerHTML = lToday.length ? lToday.map(l => {
+            const isCurrentShiftActive = (l.shift === info.label);
+            const statusText = isCurrentShiftActive ? "Jaga" : "Selesai Jaga";
+            const badgeClass = isCurrentShiftActive 
+                ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/20" 
+                : "bg-slate-500/10 text-slate-500 border-slate-500/20 opacity-75";
+
+            return `
             <div class="bg-white/40 dark:bg-slate-900/40 glass-effect p-4 rounded-[1.5rem] border border-white/20 dark:border-slate-800 flex items-center gap-4">
                 <div class="w-10 h-10 bg-slate-100 dark:bg-slate-800 text-slate-400 rounded-xl flex items-center justify-center font-black text-xs uppercase">${l.name.charAt(0)}</div>
                 <div class="flex-1 min-w-0">
                     <p class="text-[10px] font-black text-slate-800 dark:text-slate-200 uppercase tracking-tight truncate">${l.name}</p>
-                    <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">${l.time} • Shift ${l.shift}</p>
+                    <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">${l.time} WITA • Shift ${l.shift}</p>
                 </div>
-                <div class="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 px-3 py-1.5 rounded-xl text-[7px] font-black uppercase border flex-shrink-0">Masuk</div>
-            </div>`).join('') : '<div class="text-center py-10 opacity-30 text-[9px] font-black uppercase tracking-widest dark:text-white">Belum Ada Absen</div>';
+                <div class="${badgeClass} px-2.5 py-1.5 rounded-xl text-[7px] font-black uppercase border flex-shrink-0">${statusText}</div>
+            </div>`;
+        }).join('') : '<div class="text-center py-10 opacity-30 text-[9px] font-black uppercase tracking-widest dark:text-white">Belum Ada Absen</div>';
     }
 
     function renderRekap() {
@@ -546,7 +565,6 @@
             }
             
             if(!filterShift || hasDataInRow) {
-                // PERBAIKAN: Menambahkan ukuran text-[9px], break-words, dan leading rapat agar nama perawat panjang memotong rapi di dalam tabel rekap
                 html += `<tr><td class="sticky-left uppercase font-black text-[9px] leading-tight break-words max-w-[110px]">${name}</td>${cells}<td class="sticky-right">${rowTotal}</td></tr>`;
                 for(let d=1; d<=daysInMonth; d++) {
                     const dateStr = `${d.toString().padStart(2,'0')}/${(month+1).toString().padStart(2,'0')}/${year}`;
