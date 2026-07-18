@@ -1,15 +1,18 @@
 {
-  "name": "ABSENSI UGD",
-  "short_name": "ABSENSI UGD",
-  "start_url": "index.html",
+  "name": "Sistem Presensi Perawat UGD",
+  "short_name": "Presensi UGD",
+  "description": "Aplikasi Presensi Perawat UGD Puskesmas Sampanahan",
+  "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#3b82f6",
+  "orientation": "portrait",
+  "background_color": "#0d9488",
+  "theme_color": "#0d9488",
   "icons": [
     {
-      "src": "icon-512.png",
+      "src": "./icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }

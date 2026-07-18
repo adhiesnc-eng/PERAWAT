@@ -7,6 +7,12 @@
     
     <meta name="theme-color" content="#0d9488">
     
+    <!-- Tautan Manifest PWA Aktif -->
+    <link rel="manifest" href="./manifest.json">
+    
+    <!-- Memuat database konfigurasi terlebih dahulu -->
+    <script src="./db.js"></script>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/html5-qrcode"></script>
@@ -133,7 +139,10 @@
                 <div class="w-10 h-10 bg-white/20 glass-effect rounded-2xl flex items-center justify-center text-xl shadow-lg border border-white/20">🏥</div>
                 <div>
                     <p class="text-[8px] font-black text-teal-100 uppercase tracking-widest leading-none">UPTD PUSKESMAS SAMPANAHAN</p>
-                    <p class="text-[10px] font-bold text-white uppercase tracking-tighter">Desa Sampanahan Hilir</p>
+                    <div class="flex items-center gap-2 mt-0.5">
+                        <p class="text-[10px] font-bold text-white uppercase tracking-tighter">Desa Sampanahan Hilir</p>
+                        <span id="app-version-badge" class="bg-teal-500 dark:bg-teal-800 text-white text-[7px] px-1.5 py-0.5 rounded font-black tracking-normal">---</span>
+                    </div>
                     <div class="mt-1 flex items-center gap-1.5">
                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                         <span id="header-shift-name" class="text-[7px] font-black text-emerald-300 uppercase tracking-[0.2em]">Shift ---</span>
@@ -155,23 +164,21 @@
     <section id="profile-card" class="hidden px-6 mt-4 transition-all duration-500">
         <div class="bg-white/80 dark:bg-slate-900/80 glass-effect p-6 rounded-[2.5rem] shadow-xl border border-white/20 dark:border-slate-800/50">
             <div id="header-profile-section" class="flex items-start justify-between gap-4">
-                <div class="flex items-center gap-4">
-                    <div class="relative group">
+                <div class="flex items-center gap-4 flex-1 min-w-0">
+                    <div class="relative group flex-shrink-0">
                         <div id="nurse-initial" class="w-16 h-16 bg-teal-500 dark:bg-slate-800 text-white dark:text-teal-400 rounded-[1.8rem] flex items-center justify-center text-2xl font-black shadow-2xl border-4 border-white/20">?</div>
-                        <button onclick="logout()" id="btn-logout-header" class="absolute -bottom-1 -right-1 w-7 h-7 bg-rose-500 text-white rounded-xl border-2 border-white dark:border-slate-900 flex items-center justify-center shadow-lg active:scale-90 transition-transform">
+                        <button onclick="logout()" id="btn-logout-header" class="absolute -bottom-1 -right-1 w-7 h-7 bg-rose-500 text-white rounded-xl border-2 border-white dark:border-slate-950 flex items-center justify-center shadow-lg active:scale-90 transition-transform">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                         </button>
                     </div>
-                    <div>
-                        <h1 id="user-greeting" class="text-lg font-extrabold text-slate-800 dark:text-white leading-tight uppercase tracking-tight">-</h1>
-                        <p id="nurse-full-name" class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Sesi Aktif</p>
-                        <div id="gps-badge" class="inline-flex items-center gap-2 bg-slate-100 dark:bg-black/20 backdrop-blur-md px-3 py-1.5 rounded-full border border-slate-200 dark:border-white/10 mt-3">
-                            <div id="gps-dot" class="w-1.5 h-1.5 rounded-full bg-slate-400"></div>
-                            <span id="gps-text" class="text-[8px] font-black text-slate-500 dark:text-white uppercase tracking-wider">Mencari GPS...</span>
-                        </div>
+                    <div class="min-w-0 flex-1">
+                        <!-- Perbaikan Visual Nama Panjang Halaman Profil Beranda -->
+                        <h1 id="user-greeting" class="text-sm font-black text-slate-800 dark:text-white leading-tight uppercase tracking-tight max-w-[210px] break-words line-clamp-2">-</h1>
+                        <p id="user-nip" class="text-[9px] font-bold text-teal-600 dark:text-teal-400 mt-1 tracking-tight truncate">-</p>
+                        <p id="nurse-full-name" class="text-[8px] font-black text-slate-400 uppercase tracking-widest mt-0.5">Sesi Aktif</p>
                     </div>
                 </div>
-                <div class="text-right">
+                <div class="text-right flex-shrink-0 flex flex-col gap-1">
                     <span id="user-jaga-status" class="hidden px-3 py-1 bg-teal-500 text-white text-[7px] font-black rounded-full uppercase tracking-widest animate-pulse shadow-lg">Sedang Jaga</span>
                 </div>
             </div>
@@ -289,19 +296,9 @@
 </div>
 
 <script>
-    const CONFIG = {
-        WEB_APP_URL: "https://script.google.com/macros/s/AKfycbw-Fl_qSNgqr9oEnn3vUmCtN4bRCZ5M7wz5YMiofUD33pN-kICuL6zubelKVcI_k2luXg/exec",
-        DEFAULT_QR: "UGD-SAMPANAHAN-SCAN",
-        MONTHS: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"],
-        TARGET_LAT: -2.637022,
-        TARGET_LNG: 116.203674,
-        RADIUS: 100
-    };
-
     let state = {
         user: localStorage.getItem('nurse_session_name') || null,
-        data: { officers: [], logs: [], schedule: {}, config: { voice: true, popup: true, gpsLock: true, radius: 100 } },
-        isWithinRadius: true,
+        data: { officers: [], logs: [], schedule: {}, config: { voice: true, popup: true } },
         darkMode: localStorage.getItem('theme') === 'dark',
         scanner: null,
         audioContext: null
@@ -369,6 +366,12 @@
         }
     }
 
+    function autoCheckPWAUpdate(reg) {
+        setInterval(() => {
+            reg.update();
+        }, 300000); 
+    }
+
     function scrollToToday() {
         const sel = document.getElementById('rekap-select-month');
         if(!sel || !sel.value) return;
@@ -410,7 +413,6 @@
             const json = await resp.json();
             state.data = json;
             renderDashboard();
-            if (state.user) checkGPS();
             if (!document.getElementById('view-rekap').classList.contains('hidden')) renderRekap();
         } catch (e) { if(!silent) showAlert("Error", "Gagal sinkron database", "error"); }
         finally { document.getElementById('loading-overlay').classList.add('hidden'); }
@@ -422,12 +424,13 @@
         state.user = val; localStorage.setItem('nurse_session_name', val);
         showAlert("Berhasil", `Sesi ${val} aktif`); 
         renderDashboard();
-        checkGPS();
     }
 
     function logout() { 
         if(!confirm("Logout dari sesi ini?")) return;
-        state.user = null; localStorage.removeItem('nurse_session_name'); renderDashboard(); 
+        state.user = null; localStorage.removeItem('nurse_session_name'); 
+        document.getElementById('user-nip').innerText = "-"; 
+        renderDashboard(); 
     }
 
     function getShiftInfo() {
@@ -453,12 +456,25 @@
         document.getElementById('dashboard-content').classList.toggle('hidden', !state.user);
         document.getElementById('header-shift-name').innerText = `Shift ${info.label}`;
         const sel = document.getElementById('input-user');
+        
         if (sel.options.length <= 1 && state.data.officers.length > 0) {
-            sel.innerHTML = `<option value="">-- Pilih Akun --</option>` + state.data.officers.map(o => `<option value="${o}">${o}</option>`).join('');
+            sel.innerHTML = `<option value="">-- Pilih Akun --</option>` + state.data.officers.map(o => `<option value="${o.name}">${o.name}</option>`).join('');
         }
+        
         if(state.user) {
-            document.getElementById('nurse-full-name').innerText = state.user;
+            const currentOfficer = state.data.officers.find(o => o.name === state.user);
+            if (currentOfficer) {
+                document.getElementById('user-nip').innerText = `NIP/NRPK: ${currentOfficer.nip}`;
+            } else {
+                document.getElementById('user-nip').innerText = "-";
+            }
+            
+            // PERBAIKAN: Memperbaiki deteksi kapital properti dinamis (config.version) dari server agar tidak undefined
+            const serverVersion = (state.data.config && state.data.config.version) ? state.data.config.version : "PWA";
+            document.getElementById('nurse-full-name').innerText = `Sesi Aktif`;
+            document.getElementById('app-version-badge').innerText = serverVersion;
             document.getElementById('nurse-initial').innerText = state.user.charAt(0);
+            
             const [d, m, y] = logicalDate.split('/');
             const monthKey = `/${m}/${y}`;
             const monthlyLogs = state.data.logs.filter(l => l.name === state.user && l.date.includes(monthKey));
@@ -479,11 +495,11 @@
         document.getElementById('live-log-container').innerHTML = lToday.length ? lToday.map(l => `
             <div class="bg-white/40 dark:bg-slate-900/40 glass-effect p-4 rounded-[1.5rem] border border-white/20 dark:border-slate-800 flex items-center gap-4">
                 <div class="w-10 h-10 bg-slate-100 dark:bg-slate-800 text-slate-400 rounded-xl flex items-center justify-center font-black text-xs uppercase">${l.name.charAt(0)}</div>
-                <div class="flex-1">
-                    <p class="text-[10px] font-black text-slate-800 dark:text-slate-200 uppercase tracking-tight">${l.name}</p>
+                <div class="flex-1 min-w-0">
+                    <p class="text-[10px] font-black text-slate-800 dark:text-slate-200 uppercase tracking-tight truncate">${l.name}</p>
                     <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">${l.time} • Shift ${l.shift}</p>
                 </div>
-                <div class="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 px-3 py-1.5 rounded-xl text-[7px] font-black uppercase border">Masuk</div>
+                <div class="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 px-3 py-1.5 rounded-xl text-[7px] font-black uppercase border flex-shrink-0">Masuk</div>
             </div>`).join('') : '<div class="text-center py-10 opacity-30 text-[9px] font-black uppercase tracking-widest dark:text-white">Belum Ada Absen</div>';
     }
 
@@ -497,75 +513,60 @@
         const now = new Date();
         const isCurrentMonth = (now.getMonth() === month && now.getFullYear() === year);
         document.getElementById('rekap-month-label').innerText = `${CONFIG.MONTHS[month]} ${year}`;
+        
         let html = `<table class="rekap-table" id="table-to-export"><thead><tr><th class="sticky-left">Nama Perawat</th>`;
         for(let i=1; i<=daysInMonth; i++) html += `<th class="${isCurrentMonth && i === now.getDate() ? 'today-col' : ''}">${i}</th>`;
         html += `<th class="sticky-right">TOT</th></tr></thead><tbody>`;
+        
         const dailyTotals = new Array(daysInMonth + 1).fill(0);
         let grandTotal = 0;
-        const filteredOfficers = state.data.officers.filter(o => o.toLowerCase().includes(search)).sort();
-        filteredOfficers.forEach(name => {
+        
+        const filteredOfficers = state.data.officers.filter(o => o.name.toLowerCase().includes(search)).sort((a,b) => a.name.localeCompare(b.name));
+        
+        filteredOfficers.forEach(officer => {
+            const name = officer.name;
             let rowTotal = 0;
             let cells = "";
             let hasDataInRow = false;
+            
             for(let d=1; d<=daysInMonth; d++) {
                 const dateStr = `${d.toString().padStart(2,'0')}/${(month+1).toString().padStart(2,'0')}/${year}`;
                 const log = state.data.logs.find(l => l.name === name && l.date === dateStr);
                 let char = '-', css = 'opacity-20';
+                
                 if(log) {
                     if(!filterShift || log.shift === filterShift) {
                         char = log.shift.charAt(0);
                         css = `code-${char}`;
                         rowTotal++;
-                        dailyTotals[d]++;
-                        grandTotal++;
                         hasDataInRow = true;
                     }
                 }
                 cells += `<td class="${css} ${isCurrentMonth && d === now.getDate() ? 'today-col' : ''}">${char}</td>`;
             }
-            if(!filterShift || hasDataInRow) html += `<tr><td class="sticky-left uppercase font-black">${name}</td>${cells}<td class="sticky-right">${rowTotal}</td></tr>`;
+            
+            if(!filterShift || hasDataInRow) {
+                // PERBAIKAN: Menambahkan ukuran text-[9px], break-words, dan leading rapat agar nama perawat panjang memotong rapi di dalam tabel rekap
+                html += `<tr><td class="sticky-left uppercase font-black text-[9px] leading-tight break-words max-w-[110px]">${name}</td>${cells}<td class="sticky-right">${rowTotal}</td></tr>`;
+                for(let d=1; d<=daysInMonth; d++) {
+                    const dateStr = `${d.toString().padStart(2,'0')}/${(month+1).toString().padStart(2,'0')}/${year}`;
+                    const log = state.data.logs.find(l => l.name === name && l.date === dateStr);
+                    if(log && (!filterShift || log.shift === filterShift)) {
+                        dailyTotals[d]++;
+                        grandTotal++;
+                    }
+                }
+            }
         });
+        
         html += `</tbody><tfoot><tr><td class="sticky-left">TOTAL</td>`;
         for(let d=1; d<=daysInMonth; d++) html += `<td class="${isCurrentMonth && d === now.getDate() ? 'today-col' : ''}">${dailyTotals[d] || ''}</td>`;
         html += `<td class="sticky-right">${grandTotal}</td></tr></tfoot></table>`;
         document.getElementById('rekap-table-container').innerHTML = html;
     }
 
-    function checkGPS() {
-        if (!state.user || !state.data.config.gpsLock) {
-            state.isWithinRadius = true;
-            document.getElementById('gps-dot').className = "w-1.5 h-1.5 rounded-full bg-emerald-400";
-            document.getElementById('gps-text').innerText = state.user ? "GPS Lock Off" : "Sesi Tidak Aktif";
-            return;
-        }
-        navigator.geolocation.getCurrentPosition(pos => {
-            const R = 6371e3;
-            const φ1 = pos.coords.latitude * Math.PI/180;
-            const φ2 = CONFIG.TARGET_LAT * Math.PI/180;
-            const Δφ = (CONFIG.TARGET_LAT - pos.coords.latitude) * Math.PI/180;
-            const Δλ = (CONFIG.TARGET_LNG - pos.coords.longitude) * Math.PI/180;
-            const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ/2) * Math.sin(Δλ/2);
-            const dist = R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-            state.isWithinRadius = dist <= (state.data.config.radius || CONFIG.RADIUS);
-            const dot = document.getElementById('gps-dot');
-            const txt = document.getElementById('gps-text');
-            if(state.isWithinRadius) {
-                dot.className = "w-1.5 h-1.5 rounded-full bg-emerald-400";
-                txt.innerText = "Lokasi Valid";
-            } else {
-                dot.className = "w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse";
-                txt.innerText = `${Math.round(dist)}m Luar Area`;
-            }
-        }, (err) => {
-            state.isWithinRadius = false;
-            document.getElementById('gps-text').innerText = "GPS Lemah/Mati";
-            document.getElementById('gps-dot').className = "w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse";
-        }, { enableHighAccuracy: true, timeout: 5000 });
-    }
-
     async function initiateScan() {
         if (!state.user) return showAlert("Akses Ditolak", "Pilih akun perawat dulu", "error");
-        if (state.data.config.gpsLock && !state.isWithinRadius) return showAlert("Lokasi Gagal", "Anda di luar area UGD Sampanahan", "error");
         const shift = getShiftInfo(); const lDate = getLogicalDate();
         if (state.data.logs.some(l => l.name === state.user && l.date === lDate && l.shift === shift.label)) {
             return showAlert("Info", `Shift ${shift.label} sudah diabsen`, "error");
@@ -578,6 +579,9 @@
                     state.scanner.stop().then(() => {
                         document.getElementById('modal-scanner').classList.add('hidden');
                         processScan();
+                    }).catch(() => {
+                        document.getElementById('modal-scanner').classList.add('hidden');
+                        processScan();
                     });
                 } else { showAlert("QR Gagal", "QR Code tidak valid", "error"); }
             });
@@ -588,7 +592,12 @@
         document.getElementById('loading-overlay').classList.remove('hidden');
         const payload = { name: state.user, date: getLogicalDate(), shift: getShiftInfo().label, time: getCurrentTimeString() };
         try {
-            const resp = await fetch(CONFIG.WEB_APP_URL, { method: 'POST', body: JSON.stringify({ action: 'saveScan', payload }) });
+            const resp = await fetch(CONFIG.WEB_APP_URL, { 
+                method: 'POST', 
+                mode: 'cors',
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify({ action: 'saveScan', payload }) 
+            });
             const res = await resp.json();
             if (res.status === 'success') {
                 playSfx('success');
@@ -613,12 +622,17 @@
     }
 
     function closeScanner() { 
-        if(state.scanner) state.scanner.stop().catch(() => {}); 
+        if(state.scanner) {
+            state.scanner.stop().catch(() => {});
+            state.scanner = null;
+        }
         document.getElementById('modal-scanner').classList.add('hidden'); 
     }
 
     window.onload = () => {
-        if(state.darkMode) document.documentElement.classList.add('dark');
+        document.documentElement.classList.toggle('dark', state.darkMode);
+        document.getElementById('theme-icon').innerText = state.darkMode ? '☀️' : '🌙';
+        
         fetchData();
         setInterval(() => {
             const now = new Date();
@@ -626,7 +640,23 @@
             document.getElementById('date-display').innerText = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
         }, 1000);
         setInterval(() => fetchData(true), 60000);
-        setInterval(checkGPS, 15000);
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js')
+            .then(reg => {
+                autoCheckPWAUpdate(reg);
+                reg.addEventListener('updatefound', () => {
+                    const newWorker = reg.installing;
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            showAlert("Update Berhasil", "Sistem diperbarui ke versi mutakhir!", "success");
+                            setTimeout(() => { location.reload(); }, 1500);
+                        }
+                    });
+                });
+            })
+            .catch(err => console.error("Service Worker Error:", err));
+        }
     };
 </script>
 </body>
