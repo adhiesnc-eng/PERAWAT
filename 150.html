@@ -113,7 +113,7 @@
     <div class="relative flex items-center justify-center">
         <div class="absolute w-24 h-24 border-2 border-teal-500/10 rounded-full scale-110"></div>
         <div class="absolute w-20 h-20 border-t-2 border-teal-500 rounded-full animate-spin"></div>
-        <div class="w-14 h-14 bg-white dark:bg-gray-900 rounded-full shadow-xl flex items-center justify-center text-xl z-10 animate-pulse"></div>
+        <div class="w-14 h-14 bg-white dark:bg-gray-900 rounded-full shadow-xl flex items-center justify-center text-xl z-10 animate-pulse">🏥</div>
     </div>
     <p class="mt-6 text-[9px] font-extrabold uppercase tracking-[0.5em] text-teal-600/80 dark:text-teal-400">Puskesmas Sampanahan</p>
 </div>
@@ -126,7 +126,7 @@
         <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(13,148,136,0.15),transparent_60%)]"></div>
         <div class="relative z-10 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <div class="w-11 h-11 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-xl shadow-inner backdrop-blur-md"></div>
+                <div class="w-11 h-11 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-xl shadow-inner backdrop-blur-md">🏥</div>
                 <div>
                     <p class="text-[8px] font-black text-teal-400 uppercase tracking-[0.25em] leading-none">UPTD PUSKESMAS</p>
                     <h2 class="text-xs font-black text-white uppercase tracking-tight mt-0.5">SAMPANAHAN HILIR</h2>
@@ -142,7 +142,7 @@
                     <p id="date-display" class="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-1">---</p>
                 </div>
                 <button onclick="toggleDarkMode()" class="w-10 h-10 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-white backdrop-blur-md transition-all active:scale-90 hover:bg-white/10">
-                    <span id="theme-icon"></span>
+                    <span id="theme-icon">🌙</span>
                 </button>
             </div>
         </div>
@@ -179,7 +179,7 @@
         <main id="view-home" class="px-6 mt-6 space-y-6">
             <!-- Card Autentikasi / Pilihan Akun -->
             <section id="card-auth" class="bg-white/90 dark:bg-gray-900/90 glass-premium p-8 rounded-[2rem] shadow-xl text-center relative z-20">
-                <div class="w-14 h-14 bg-gradient-to-br from-teal-500 to-emerald-600 text-white rounded-2xl flex items-center justify-center text-2xl mx-auto mb-5 shadow-lg shadow-teal-500/20 animate-float"></div>
+                <div class="w-14 h-14 bg-gradient-to-br from-teal-500 to-emerald-600 text-white rounded-2xl flex items-center justify-center text-2xl mx-auto mb-5 shadow-lg shadow-teal-500/20 animate-float">🏥</div>
                 <h3 class="font-black text-slate-800 dark:text-white text-xs uppercase tracking-[0.2em] mb-4">Akses Masuk Sesi</h3>
                 <div class="space-y-3">
                     <div class="relative bg-slate-50 dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-white/5 p-1">
@@ -196,7 +196,7 @@
                 <section class="pb-6">
                     <div class="flex justify-between items-center mb-4 px-1">
                         <div class="flex items-center gap-2">
-                            <span class="text-base"></span>
+                            <span class="text-base">📝</span>
                             <h3 class="text-[10px] font-black uppercase tracking-[0.15em] text-slate-700 dark:text-slate-400">Aktivitas Presensi Hari Ini</h3>
                         </div>
                         <div class="flex items-center gap-1.5 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20 animate-pulse">
@@ -233,7 +233,7 @@
                                 <span id="nurse-initial" class="text-slate-400 dark:text-teal-400 text-3xl font-black">?</span>
                             </div>
                             <!-- Icon Overlay Badge Edit -->
-                            <div class="absolute -bottom-1 -right-1 bg-teal-600 text-white w-7 h-7 rounded-xl flex items-center justify-center border-2 border-white dark:border-gray-900 shadow-lg text-[10px] font-bold group-hover:bg-teal-700 transition-colors"></div>
+                            <div class="absolute -bottom-1 -right-1 bg-teal-600 text-white w-7 h-7 rounded-xl flex items-center justify-center border-2 border-white dark:border-gray-900 shadow-lg text-[10px] font-bold group-hover:bg-teal-700 transition-colors">📷</div>
                         </button>
                     </div>
                     
@@ -302,7 +302,7 @@
                 <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span> Kamera Siap
             </p>
         </div>
-        <button onclick="closeScanner()" class="w-10 h-10 bg-white/5 border border-white/10 text-white rounded-xl flex items-center justify-center backdrop-blur-md transition-all active:scale-90 hover:bg-white/10 text-xs"></button>
+        <button onclick="closeScanner()" class="w-10 h-10 bg-white/5 border border-white/10 text-white rounded-xl flex items-center justify-center backdrop-blur-md transition-all active:scale-90 hover:bg-white/10 text-xs">✕</button>
     </div>
     <div class="flex-1 flex flex-col items-center justify-center p-6 relative">
         <div class="relative p-1 bg-slate-900/50 rounded-[2.5rem] border border-white/5 shadow-2xl">
@@ -324,7 +324,7 @@
 
 <!-- Sukses Animasi Modal -->
 <div id="modal-success-presence" class="fixed inset-0 bg-slate-50 dark:bg-gray-950 z-[8000] hidden flex-col items-center justify-center text-center p-8">
-    <div class="w-24 h-24 bg-teal-500/10 text-teal-500 rounded-[2rem] flex items-center justify-center text-5xl mb-6 shadow-inner animate-bounce"></div>
+    <div class="w-24 h-24 bg-teal-500/10 text-teal-500 rounded-[2rem] flex items-center justify-center text-5xl mb-6 shadow-inner animate-bounce">✅</div>
     <h2 class="text-2xl font-black text-slate-800 dark:text-white uppercase tracking-tight">Presensi Berhasil</h2>
     <p id="success-nurse-name" class="text-base font-bold text-teal-600 dark:text-teal-400 mt-2 uppercase tracking-wide"></p>
     <div class="mt-8 w-full max-w-xs bg-white dark:bg-gray-900 p-6 rounded-[2rem] border border-slate-200/60 dark:border-white/5 shadow-xl">
@@ -337,7 +337,7 @@
 <!-- Box Notifikasi Pop-up -->
 <div id="alert-box" class="fixed top-6 left-6 right-6 z-[7000] transition-all duration-500 translate-y-[-150%] opacity-0 pointer-events-none">
     <div class="bg-white/95 dark:bg-gray-900/95 shadow-2xl p-4 rounded-2xl flex items-center gap-4 border border-slate-200/60 dark:border-white/10 backdrop-blur-md">
-        <div id="alert-icon-bg" class="w-10 h-10 rounded-xl flex items-center justify-center text-lg"></div>
+        <div id="alert-icon-bg" class="w-10 h-10 rounded-xl flex items-center justify-center text-lg">🔔</div>
         <div class="flex-1"><h4 id="alert-title" class="text-[9px] font-black uppercase tracking-wider dark:text-white">Notifikasi</h4><p id="alert-msg" class="text-[9px] font-bold text-slate-500 dark:text-slate-400 mt-0.5"></p></div>
     </div>
 </div>
@@ -433,10 +433,10 @@
         document.getElementById('alert-title').innerText = title;
         document.getElementById('alert-msg').innerText = msg;
         if(type === 'success') {
-            iconBg.className = "w-10 h-10 rounded-xl flex items-center justify-center text-lg bg-teal-500/10 text-teal-600"; iconBg.innerText = '';
+            iconBg.className = "w-10 h-10 rounded-xl flex items-center justify-center text-lg bg-teal-500/10 text-teal-600"; iconBg.innerText = '🔔';
             playSfx('ping'); triggerHaptic(30);
         } else {
-            iconBg.className = "w-10 h-10 rounded-xl flex items-center justify-center text-lg bg-rose-500/10 text-rose-500"; iconBg.innerText = '';
+            iconBg.className = "w-10 h-10 rounded-xl flex items-center justify-center text-lg bg-rose-500/10 text-rose-500"; iconBg.innerText = '⚠️';
             playSfx('error'); triggerHaptic(100);
         }
         box.style.transform = 'translateY(0)'; box.style.opacity = '1';
@@ -447,7 +447,7 @@
         triggerHaptic(20);
         state.darkMode = !state.darkMode; localStorage.setItem('theme', state.darkMode ? 'dark' : 'light');
         document.documentElement.classList.toggle('dark', state.darkMode);
-        document.getElementById('theme-icon').innerText = state.darkMode ? '' : '';
+        document.getElementById('theme-icon').innerText = state.darkMode ? '☀️' : '🌙';
     }
 
     async function fetchData(silent = false) {
@@ -584,7 +584,7 @@
                     <div class="w-10 h-10 bg-slate-100 dark:bg-gray-900 text-slate-700 dark:text-teal-400 rounded-xl flex items-center justify-center font-black text-xs shadow-inner flex-shrink-0">${l.name.charAt(0)}</div>
                     <div class="min-w-0">
                         <p class="text-[11px] font-extrabold text-slate-800 dark:text-gray-200 uppercase tracking-wide truncate">${l.name}</p>
-                        <p class="text-[8px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">${l.time} WITA � Shift ${l.shift}</p>
+                        <p class="text-[8px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">${l.time} WITA • Shift ${l.shift}</p>
                     </div>
                 </div>
                 <div class="${badgeClass} px-3 py-1.5 rounded-xl text-[7px] font-black uppercase tracking-wider flex-shrink-0">${statusText}</div>
@@ -719,7 +719,7 @@
 
     window.onload = () => {
         document.documentElement.classList.toggle('dark', state.darkMode);
-        document.getElementById('theme-icon').innerText = state.darkMode ? '' : '';
+        document.getElementById('theme-icon').innerText = state.darkMode ? '☀️' : '🌙';
         
         fetchData();
         setInterval(() => {
