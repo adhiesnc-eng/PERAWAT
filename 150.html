@@ -95,10 +95,8 @@
         .code-S { color: #d97706 !important; background: rgba(217, 119, 6, 0.08) !important; border-radius: 6px; }
         .code-M { color: #2563eb !important; background: rgba(37, 99, 235, 0.08) !important; border-radius: 6px; }
         
-        /* Modifikasi Animasi Laser Neon Scanner Modern */
-        .laser-line { position: absolute; left: 0; right: 0; height: 3px; background: linear-gradient(to right, transparent, #2dd4bf, #10b981, #2dd4bf, transparent); box-shadow: 0 0 18px #10b981, 0 0 30px #2dd4bf; animation: laser 2s infinite ease-in-out; z-index: 20; }
+        .laser-line { position: absolute; left: 0; right: 0; height: 3px; background: linear-gradient(to right, transparent, #2dd4bf, #10b981, #2dd4bf, transparent); box-shadow: 0 0 18px #10b981, 0 0 30px #2dd4bf; animation: laser 2.5s infinite ease-in-out; z-index: 20; }
         
-        /* Sudut Bingkai Scanner */
         .scanner-corner { position: absolute; width: 24px; height: 24px; border-color: #2dd4bf; border-width: 4px; z-index: 30; }
         .corner-tl { top: -2px; left: -2px; border-right: 0; border-bottom: 0; border-radius: 1.25rem 0 0 0; }
         .corner-tr { top: -2px; right: -2px; border-left: 0; border-bottom: 0; border-radius: 0 1.25rem 0 0; }
@@ -115,7 +113,7 @@
     <div class="relative flex items-center justify-center">
         <div class="absolute w-24 h-24 border-2 border-teal-500/10 rounded-full scale-110"></div>
         <div class="absolute w-20 h-20 border-t-2 border-teal-500 rounded-full animate-spin"></div>
-        <div class="w-14 h-14 bg-white dark:bg-gray-900 rounded-full shadow-xl flex items-center justify-center text-xl z-10 animate-pulse">🏥</div>
+        <div class="w-14 h-14 bg-white dark:bg-gray-900 rounded-full shadow-xl flex items-center justify-center text-xl z-10 animate-pulse"></div>
     </div>
     <p class="mt-6 text-[9px] font-extrabold uppercase tracking-[0.5em] text-teal-600/80 dark:text-teal-400">Puskesmas Sampanahan</p>
 </div>
@@ -128,7 +126,7 @@
         <div class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(13,148,136,0.15),transparent_60%)]"></div>
         <div class="relative z-10 flex justify-between items-center">
             <div class="flex items-center gap-3">
-                <div class="w-11 h-11 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-xl shadow-inner backdrop-blur-md">🏥</div>
+                <div class="w-11 h-11 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-xl shadow-inner backdrop-blur-md"></div>
                 <div>
                     <p class="text-[8px] font-black text-teal-400 uppercase tracking-[0.25em] leading-none">UPTD PUSKESMAS</p>
                     <h2 class="text-xs font-black text-white uppercase tracking-tight mt-0.5">SAMPANAHAN HILIR</h2>
@@ -144,7 +142,7 @@
                     <p id="date-display" class="text-[8px] font-bold text-slate-400 uppercase tracking-widest mt-1">---</p>
                 </div>
                 <button onclick="toggleDarkMode()" class="w-10 h-10 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-white backdrop-blur-md transition-all active:scale-90 hover:bg-white/10">
-                    <span id="theme-icon">🌙</span>
+                    <span id="theme-icon"></span>
                 </button>
             </div>
         </div>
@@ -181,7 +179,7 @@
         <main id="view-home" class="px-6 mt-6 space-y-6">
             <!-- Card Autentikasi / Pilihan Akun -->
             <section id="card-auth" class="bg-white/90 dark:bg-gray-900/90 glass-premium p-8 rounded-[2rem] shadow-xl text-center relative z-20">
-                <div class="w-14 h-14 bg-gradient-to-br from-teal-500 to-emerald-600 text-white rounded-2xl flex items-center justify-center text-2xl mx-auto mb-5 shadow-lg shadow-teal-500/20 animate-float">🏥</div>
+                <div class="w-14 h-14 bg-gradient-to-br from-teal-500 to-emerald-600 text-white rounded-2xl flex items-center justify-center text-2xl mx-auto mb-5 shadow-lg shadow-teal-500/20 animate-float"></div>
                 <h3 class="font-black text-slate-800 dark:text-white text-xs uppercase tracking-[0.2em] mb-4">Akses Masuk Sesi</h3>
                 <div class="space-y-3">
                     <div class="relative bg-slate-50 dark:bg-slate-950 rounded-xl border border-slate-200 dark:border-white/5 p-1">
@@ -198,7 +196,7 @@
                 <section class="pb-6">
                     <div class="flex justify-between items-center mb-4 px-1">
                         <div class="flex items-center gap-2">
-                            <span class="text-base">📝</span>
+                            <span class="text-base"></span>
                             <h3 class="text-[10px] font-black uppercase tracking-[0.15em] text-slate-700 dark:text-slate-400">Aktivitas Presensi Hari Ini</h3>
                         </div>
                         <div class="flex items-center gap-1.5 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20 animate-pulse">
@@ -219,18 +217,26 @@
             </div>
         </main>
 
-        <!-- VIEW PROFIL PREMIUM (ID CARD MODEL) -->
+        <!-- VIEW PROFIL PREMIUM (ID CARD MODEL + CUSTOM UPLOAD PHOTO) -->
         <main id="view-profil" class="hidden px-6 mt-6 space-y-6">
             <section id="profile-card" class="bg-white/90 dark:bg-gray-900/90 glass-premium p-6 rounded-[2rem] shadow-xl relative overflow-hidden">
                 <div class="absolute -right-10 -top-10 w-32 h-32 bg-teal-500/5 dark:bg-teal-500/10 rounded-full pointer-events-none"></div>
                 
                 <div id="header-profile-section" class="flex flex-col items-center text-center gap-4">
                     <div class="relative">
-                        <!-- Bingkai Foto Premium -->
-                        <div id="nurse-profile-wrapper" class="w-24 h-24 bg-gradient-to-tr from-slate-200 to-slate-100 dark:from-gray-800 dark:to-gray-700 rounded-[2rem] flex items-center justify-center shadow-xl border-4 border-white dark:border-gray-800 overflow-hidden">
-                            <span id="nurse-initial" class="text-slate-400 dark:text-teal-400 text-3xl font-black">?</span>
-                        </div>
+                        <!-- Input File Tersembunyi untuk Ganti Foto -->
+                        <input type="file" id="profile-file-input" accept="image/*" class="hidden" onchange="uploadCustomPhoto(this)">
+                        
+                        <!-- Bingkai Foto Premium Interaktif -->
+                        <button onclick="document.getElementById('profile-file-input').click()" class="relative group block focus:outline-none">
+                            <div id="nurse-profile-wrapper" class="w-24 h-24 bg-gradient-to-tr from-slate-200 to-slate-100 dark:from-gray-800 dark:to-gray-700 rounded-[2rem] flex items-center justify-center shadow-xl border-4 border-white dark:border-gray-800 overflow-hidden relative transition-transform group-hover:scale-105 active:scale-95">
+                                <span id="nurse-initial" class="text-slate-400 dark:text-teal-400 text-3xl font-black">?</span>
+                            </div>
+                            <!-- Icon Overlay Badge Edit -->
+                            <div class="absolute -bottom-1 -right-1 bg-teal-600 text-white w-7 h-7 rounded-xl flex items-center justify-center border-2 border-white dark:border-gray-900 shadow-lg text-[10px] font-bold group-hover:bg-teal-700 transition-colors"></div>
+                        </button>
                     </div>
+                    
                     <div class="w-full px-4">
                         <h1 id="user-greeting" class="text-sm font-black text-slate-800 dark:text-white leading-tight uppercase tracking-tight break-words line-clamp-2">-</h1>
                         <p id="user-nip" class="text-[9px] font-bold text-teal-600 dark:text-teal-400 mt-1 tracking-widest uppercase opacity-80">-</p>
@@ -286,12 +292,9 @@
     </nav>
 </div>
 
-<!-- TAMPILAN KAMERA SCAN QR MODERN & FUTURISTIK -->
+<!-- TAMPILAN KAMERA SCAN QR -->
 <div id="modal-scanner" class="fixed inset-0 z-[6000] hidden flex-col bg-[#020617]">
-    <!-- Blur ambient di background kamera -->
     <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-72 h-72 bg-teal-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
-    <!-- Header Panel Atas Transparan -->
     <div class="relative z-50 px-6 pt-14 pb-5 flex justify-between items-center backdrop-blur-md bg-slate-950/40 border-b border-white/5">
         <div>
             <h4 class="font-extrabold text-white text-sm uppercase tracking-wider">Pemindai Kode QR</h4>
@@ -299,30 +302,19 @@
                 <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span> Kamera Siap
             </p>
         </div>
-        <button onclick="closeScanner()" class="w-10 h-10 bg-white/5 border border-white/10 text-white rounded-xl flex items-center justify-center backdrop-blur-md transition-all active:scale-90 hover:bg-white/10 text-xs">
-            ✕
-        </button>
+        <button onclick="closeScanner()" class="w-10 h-10 bg-white/5 border border-white/10 text-white rounded-xl flex items-center justify-center backdrop-blur-md transition-all active:scale-90 hover:bg-white/10 text-xs"></button>
     </div>
-
-    <!-- Area Viewfinder Kamera Utama -->
     <div class="flex-1 flex flex-col items-center justify-center p-6 relative">
         <div class="relative p-1 bg-slate-900/50 rounded-[2.5rem] border border-white/5 shadow-2xl">
-            <!-- Jendela Scanner -->
             <div class="relative w-[270px] h-[270px] rounded-[2.2rem] overflow-hidden bg-black shadow-inner">
                 <div id="qr-reader" class="w-full h-full"></div>
-                
-                <!-- Laser Animasi Neon -->
                 <div class="laser-line"></div>
-                
-                <!-- Sudut Bingkai Neon Futuristik -->
                 <div class="scanner-corner corner-tl"></div>
                 <div class="scanner-corner corner-tr"></div>
                 <div class="scanner-corner corner-bl"></div>
                 <div class="scanner-corner corner-br"></div>
             </div>
         </div>
-        
-        <!-- Instruksi Pindai Bawah -->
         <div class="mt-8 text-center max-w-xs px-4">
             <p class="text-white/80 font-bold text-[10px] uppercase tracking-[0.15em] animate-pulse-slow">Posisikan QR Code Tepat di Dalam Kotak Bingkai</p>
             <p class="text-slate-500 text-[8px] font-medium mt-1.5 leading-normal">Pastikan pencahayaan cukup dan lensa kamera dalam kondisi bersih.</p>
@@ -332,7 +324,7 @@
 
 <!-- Sukses Animasi Modal -->
 <div id="modal-success-presence" class="fixed inset-0 bg-slate-50 dark:bg-gray-950 z-[8000] hidden flex-col items-center justify-center text-center p-8">
-    <div class="w-24 h-24 bg-teal-500/10 text-teal-500 rounded-[2rem] flex items-center justify-center text-5xl mb-6 shadow-inner animate-bounce">✅</div>
+    <div class="w-24 h-24 bg-teal-500/10 text-teal-500 rounded-[2rem] flex items-center justify-center text-5xl mb-6 shadow-inner animate-bounce"></div>
     <h2 class="text-2xl font-black text-slate-800 dark:text-white uppercase tracking-tight">Presensi Berhasil</h2>
     <p id="success-nurse-name" class="text-base font-bold text-teal-600 dark:text-teal-400 mt-2 uppercase tracking-wide"></p>
     <div class="mt-8 w-full max-w-xs bg-white dark:bg-gray-900 p-6 rounded-[2rem] border border-slate-200/60 dark:border-white/5 shadow-xl">
@@ -345,7 +337,7 @@
 <!-- Box Notifikasi Pop-up -->
 <div id="alert-box" class="fixed top-6 left-6 right-6 z-[7000] transition-all duration-500 translate-y-[-150%] opacity-0 pointer-events-none">
     <div class="bg-white/95 dark:bg-gray-900/95 shadow-2xl p-4 rounded-2xl flex items-center gap-4 border border-slate-200/60 dark:border-white/10 backdrop-blur-md">
-        <div id="alert-icon-bg" class="w-10 h-10 rounded-xl flex items-center justify-center text-lg">🔔</div>
+        <div id="alert-icon-bg" class="w-10 h-10 rounded-xl flex items-center justify-center text-lg"></div>
         <div class="flex-1"><h4 id="alert-title" class="text-[9px] font-black uppercase tracking-wider dark:text-white">Notifikasi</h4><p id="alert-msg" class="text-[9px] font-bold text-slate-500 dark:text-slate-400 mt-0.5"></p></div>
     </div>
 </div>
@@ -414,9 +406,9 @@
         const navRekap = document.getElementById('nav-rekap');
         const navProfil = document.getElementById('nav-profil');
         
-        navHome.className = v === 'home' ? 'flex-1 py-3 flex flex-col items-center gap-1 rounded-2xl text-teal-500 bg-white/5 transition-all' : 'flex-1 py-3 flex flex-col items-center gap-1 rounded-2xl text-slate-400 transition-all';
-        navRekap.className = v === 'rekap' ? 'flex-1 py-3 flex flex-col items-center gap-1 rounded-2xl text-teal-500 bg-white/5 transition-all' : 'flex-1 py-3 flex flex-col items-center gap-1 rounded-2xl text-slate-400 transition-all';
-        navProfil.className = v === 'profil' ? 'flex-1 py-3 flex flex-col items-center gap-1 rounded-2xl text-teal-500 bg-white/5 transition-all' : 'flex-1 py-3 flex flex-col items-center gap-1 rounded-2xl text-slate-400 transition-all';
+        navHome.className = v === 'home' ? 'flex-1 py-3 flex flex-col items-center gap-1 rounded-2xl text-teal-400 bg-white/5 transition-all' : 'flex-1 py-3 flex flex-col items-center gap-1 rounded-2xl text-slate-400 transition-all';
+        navRekap.className = v === 'rekap' ? 'flex-1 py-3 flex flex-col items-center gap-1 rounded-2xl text-teal-400 bg-white/5 transition-all' : 'flex-1 py-3 flex flex-col items-center gap-1 rounded-2xl text-slate-400 transition-all';
+        navProfil.className = v === 'profil' ? 'flex-1 py-3 flex flex-col items-center gap-1 rounded-2xl text-teal-400 bg-white/5 transition-all' : 'flex-1 py-3 flex flex-col items-center gap-1 rounded-2xl text-slate-400 transition-all';
     }
 
     function autoCheckPWAUpdate(reg) {
@@ -441,10 +433,10 @@
         document.getElementById('alert-title').innerText = title;
         document.getElementById('alert-msg').innerText = msg;
         if(type === 'success') {
-            iconBg.className = "w-10 h-10 rounded-xl flex items-center justify-center text-lg bg-teal-500/10 text-teal-600"; iconBg.innerText = '🔔';
+            iconBg.className = "w-10 h-10 rounded-xl flex items-center justify-center text-lg bg-teal-500/10 text-teal-600"; iconBg.innerText = '';
             playSfx('ping'); triggerHaptic(30);
         } else {
-            iconBg.className = "w-10 h-10 rounded-xl flex items-center justify-center text-lg bg-rose-500/10 text-rose-500"; iconBg.innerText = '⚠️';
+            iconBg.className = "w-10 h-10 rounded-xl flex items-center justify-center text-lg bg-rose-500/10 text-rose-500"; iconBg.innerText = '';
             playSfx('error'); triggerHaptic(100);
         }
         box.style.transform = 'translateY(0)'; box.style.opacity = '1';
@@ -455,7 +447,7 @@
         triggerHaptic(20);
         state.darkMode = !state.darkMode; localStorage.setItem('theme', state.darkMode ? 'dark' : 'light');
         document.documentElement.classList.toggle('dark', state.darkMode);
-        document.getElementById('theme-icon').innerText = state.darkMode ? '☀️' : '🌙';
+        document.getElementById('theme-icon').innerText = state.darkMode ? '' : '';
     }
 
     async function fetchData(silent = false) {
@@ -484,6 +476,22 @@
         document.getElementById('nurse-profile-wrapper').innerHTML = `<span id="nurse-initial" class="text-slate-400 dark:text-teal-400 text-3xl font-black">?</span>`;
         renderDashboard();
         showView('home');
+    }
+
+    // FUNGSI MINI BACKEND LOCAL UNTUK PROSES UPLOAD FOTO PROFIL MANDIRI
+    function uploadCustomPhoto(input) {
+        if (!state.user) return showAlert("Gagal", "Sesi perawat belum dipilih!", "error");
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Image = e.target.result;
+                // Simpan gambar base64 ke localStorage berdasarkan nama sesi aktif
+                localStorage.setItem(`custom_photo_${state.user}`, base64Image);
+                showAlert("Sukses", "Foto profil berhasil diperbarui!");
+                renderDashboard();
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
     }
 
     function getShiftInfo() {
@@ -520,9 +528,18 @@
                 document.getElementById('user-nip').innerText = `${currentOfficer.nip || '-'}`;
                 
                 const wrapper = document.getElementById('nurse-profile-wrapper');
-                if (currentOfficer.photo && currentOfficer.photo.trim() !== "" && currentOfficer.photo !== "-") {
+                // PRIORITAS 1: Cek apakah ada foto kustom di LocalStorage mandiri
+                const customPhoto = localStorage.getItem(`custom_photo_${state.user}`);
+                
+                if (customPhoto) {
+                    wrapper.innerHTML = `<img src="${customPhoto}" class="w-full h-full object-cover"/>`;
+                } 
+                // PRIORITAS 2: Cek foto default dari database pusat
+                else if (currentOfficer.photo && currentOfficer.photo.trim() !== "" && currentOfficer.photo !== "-") {
                     wrapper.innerHTML = `<img src="${currentOfficer.photo}" class="w-full h-full object-cover" onerror="this.src='', this.parentNode.innerHTML='<span class=\'text-teal-500 font-black text-3xl\'>${state.user.charAt(0)}</span>'"/>`;
-                } else {
+                } 
+                // PRIORITAS 3: Kembalikan ke text inisial nama jika kosong
+                else {
                     wrapper.innerHTML = `<span id="nurse-initial" class="text-teal-500 dark:text-teal-400 text-3xl font-black">${state.user.charAt(0)}</span>`;
                 }
             } else {
@@ -567,7 +584,7 @@
                     <div class="w-10 h-10 bg-slate-100 dark:bg-gray-900 text-slate-700 dark:text-teal-400 rounded-xl flex items-center justify-center font-black text-xs shadow-inner flex-shrink-0">${l.name.charAt(0)}</div>
                     <div class="min-w-0">
                         <p class="text-[11px] font-extrabold text-slate-800 dark:text-gray-200 uppercase tracking-wide truncate">${l.name}</p>
-                        <p class="text-[8px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">${l.time} WITA • Shift ${l.shift}</p>
+                        <p class="text-[8px] font-bold text-slate-400 uppercase tracking-wider mt-0.5">${l.time} WITA � Shift ${l.shift}</p>
                     </div>
                 </div>
                 <div class="${badgeClass} px-3 py-1.5 rounded-xl text-[7px] font-black uppercase tracking-wider flex-shrink-0">${statusText}</div>
@@ -702,7 +719,7 @@
 
     window.onload = () => {
         document.documentElement.classList.toggle('dark', state.darkMode);
-        document.getElementById('theme-icon').innerText = state.darkMode ? '☀️' : '🌙';
+        document.getElementById('theme-icon').innerText = state.darkMode ? '' : '';
         
         fetchData();
         setInterval(() => {
