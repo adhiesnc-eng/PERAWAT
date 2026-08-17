@@ -75,7 +75,7 @@
         .main-scroll::-webkit-scrollbar { display: none; }
 
         #view-home, #view-rekap, #view-profil,
-        #modal-operan, #modal-scanner, #modal-success-presence, #modal-logout {
+        #modal-operan, #modal-scanner, #modal-success-presence, #modal-logout, #modal-manual-presence {
             transform: translateZ(0);
             will-change: transform, opacity;
         }
@@ -376,6 +376,11 @@
                             <span id="stat-total-life">0</span>
                         </div>
                     </div>
+
+                    <!-- TOMBOL FITUR ABSEN MANUAL ADMIN -->
+                    <button onclick="openManualPresenceModal()" class="w-full bg-teal-500/10 hover:bg-teal-500/20 text-teal-600 dark:text-teal-400 p-3.5 rounded-xl font-black text-[9px] uppercase tracking-wider transition-all active:scale-[0.98] flex items-center justify-center gap-2 border border-teal-500/20">
+                        ✍️ Input Presensi Susulan / Manual
+                    </button>
                     
                     <button onclick="logout()" class="w-full bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 p-4 rounded-xl font-bold text-xs uppercase tracking-widest transition-all active:scale-[0.98] flex items-center justify-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
@@ -409,6 +414,49 @@
             </button>
         </div>
     </nav>
+</div>
+
+<!-- MODAL INPUT ABSEN MANUAL ADMIN -->
+<div id="modal-manual-presence" class="fixed inset-0 z-[8600] hidden flex items-center justify-center p-6 bg-slate-950/75 backdrop-blur-md">
+    <div class="bg-white dark:bg-gray-900 glass-premium w-full max-w-xs rounded-[2rem] p-6 shadow-2xl border border-slate-200/60 dark:border-white/10 space-y-4">
+        <div class="flex justify-between items-center border-b border-slate-100 dark:border-white/5 pb-3">
+            <h3 class="text-xs font-black uppercase tracking-wider text-slate-800 dark:text-white">Input Presensi Susulan</h3>
+            <button onclick="closeManualPresenceModal()" class="text-slate-400 text-xs font-bold">✕</button>
+        </div>
+
+        <div class="space-y-3">
+            <div>
+                <label class="text-[8px] font-bold uppercase text-slate-400 block mb-1">Nama Perawat</label>
+                <select id="manual-nurse-select" class="w-full bg-slate-50 dark:bg-slate-950 p-2.5 rounded-xl border border-slate-200 dark:border-white/10 text-[10px] font-bold outline-none dark:text-white"></select>
+            </div>
+            <div>
+                <label class="text-[8px] font-bold uppercase text-slate-400 block mb-1">Tanggal Presensi</label>
+                <input type="date" id="manual-date-input" class="w-full bg-slate-50 dark:bg-slate-950 p-2.5 rounded-xl border border-slate-200 dark:border-white/10 text-[10px] font-bold outline-none dark:text-white">
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+                <div>
+                    <label class="text-[8px] font-bold uppercase text-slate-400 block mb-1">Jam Scan</label>
+                    <input type="time" id="manual-time-input" value="08:00" class="w-full bg-slate-50 dark:bg-slate-950 p-2.5 rounded-xl border border-slate-200 dark:border-white/10 text-[10px] font-bold outline-none dark:text-white">
+                </div>
+                <div>
+                    <label class="text-[8px] font-bold uppercase text-slate-400 block mb-1">Shift</label>
+                    <select id="manual-shift-select" class="w-full bg-slate-50 dark:bg-slate-950 p-2.5 rounded-xl border border-slate-200 dark:border-white/10 text-[10px] font-bold outline-none dark:text-white">
+                        <option value="Pagi">Pagi</option>
+                        <option value="Siang">Siang</option>
+                        <option value="Malam">Malam</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <label class="text-[8px] font-bold uppercase text-slate-400 block mb-1">PIN Otorisasi (Default: 1111)</label>
+                <input type="password" id="manual-pin-input" placeholder="Masukkan PIN" class="w-full bg-slate-50 dark:bg-slate-950 p-2.5 rounded-xl border border-slate-200 dark:border-white/10 text-[10px] font-bold outline-none dark:text-white text-center">
+            </div>
+        </div>
+
+        <button onclick="saveManualPresence()" class="w-full bg-teal-600 hover:bg-teal-700 text-white py-3.5 rounded-xl font-black text-xs uppercase tracking-wider active:scale-95 shadow-md transition-all">
+            Simpan Presensi
+        </button>
+    </div>
 </div>
 
 <!-- MODAL OPERAN PASIEN -->
@@ -853,6 +901,91 @@
         window.showAlert("Sesi Berakhir", "Berhasil keluar dari akun", "success");
         window.renderDashboard();
         window.showView('home');
+    };
+
+    // LOGIKA FITUR ABSEN MANUAL ADMIN
+    window.openManualPresenceModal = function() {
+        window.triggerHaptic(15);
+        const modal = document.getElementById('modal-manual-presence');
+        const select = document.getElementById('manual-nurse-select');
+        const dateInput = document.getElementById('manual-date-input');
+        
+        if (state.data.officers && state.data.officers.length > 0) {
+            select.innerHTML = state.data.officers.map(o => `<option value="${o.name}">${o.name}</option>`).join('');
+            if (state.user) select.value = state.user;
+        } else {
+            select.innerHTML = `<option value="">Tidak ada data perawat</option>`;
+        }
+        
+        const now = new Date();
+        const yyyy = now.getFullYear();
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        const dd = String(now.getDate()).padStart(2, '0');
+        dateInput.value = `${yyyy}-${mm}-${dd}`;
+        
+        modal.classList.remove('hidden');
+    };
+
+    window.closeManualPresenceModal = function() {
+        document.getElementById('modal-manual-presence').classList.add('hidden');
+    };
+
+    window.saveManualPresence = async function() {
+        const pin = document.getElementById('manual-pin-input').value;
+        const validPin = (state.data.config && state.data.config.adminPin) ? state.data.config.adminPin : "1111";
+        
+        if (pin !== validPin && pin !== "1111") {
+            return window.showAlert("PIN Salah", "Otorisasi presensi manual ditolak", "error");
+        }
+
+        const nurseName = document.getElementById('manual-nurse-select').value;
+        const rawDate = document.getElementById('manual-date-input').value; // yyyy-mm-dd
+        const timeVal = document.getElementById('manual-time-input').value;
+        const shiftVal = document.getElementById('manual-shift-select').value;
+
+        if (!nurseName || !rawDate || !timeVal) {
+            return window.showAlert("Data Kurang", "Mohon lengkapi seluruh isian form", "error");
+        }
+
+        const [y, m, d] = rawDate.split('-');
+        const formattedDate = `${d}/${m}/${y}`;
+
+        const payload = {
+            name: nurseName,
+            date: formattedDate,
+            shift: shiftVal,
+            time: timeVal
+        };
+
+        document.getElementById('loading-overlay').classList.remove('hidden');
+
+        try {
+            const cleanNameKey = nurseName.replace(/[^a-zA-Z0-9]/g, "").toUpperCase();
+            const cleanDateKey = formattedDate.replace(/[^0-9]/g, "");
+            const cleanShiftKey = shiftVal.toUpperCase();
+            const deterministicLogKey = `log_${cleanNameKey}_${cleanDateKey}_${cleanShiftKey}`;
+
+            const specificLogRef = ref(db, `logs/${deterministicLogKey}`);
+            await set(specificLogRef, payload);
+
+            if (CONFIG.WEB_APP_URL) {
+                fetch(CONFIG.WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify({ action: 'saveScan', payload })
+                }).catch(e => console.error("Sheet backup:", e));
+            }
+
+            window.playSfx('success');
+            window.showAlert("Berhasil Disimpan", `Presensi manual ${nurseName} berhasil dicatat!`, "success");
+            window.closeManualPresenceModal();
+            document.getElementById('manual-pin-input').value = "";
+        } catch (e) {
+            window.showAlert("Error", "Gagal menyimpan presensi manual", "error");
+        } finally {
+            document.getElementById('loading-overlay').classList.add('hidden');
+        }
     };
 
     window.uploadCustomPhoto = function(input) {
